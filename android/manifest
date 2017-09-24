@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 3
+architectures: armeabi-v7a x86
+description: Titanium Multi-Imagepicker module lets you select multiple images from its inbuilt gallery with lots of customization options
+author: Prashant Saini
+license: LGPL 2.1
+copyright: Copyright (c) 2017 by Prashant Saini
+
+# these should not be edited
+name: imagepicker
+moduleid: in.prashant.imagepicker
+guid: 0e233245-8692-4e70-bcec-00f3f1bb9014
+platform: android
+minsdk: 6.0.0.GA
