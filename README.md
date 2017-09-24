@@ -87,7 +87,7 @@ module.openGallery({
 | int width    |  Resized width   | no |
 | int height    |  Resized height   | no |
 
-### Feel free to use this module
+#### Feel free to use this module & make it better with regular updates & bug reporting.
 
 ## Thanks & Credits
 * [Michael Gangolf](https://github.com/m1ga) for helping me out on Slack.
