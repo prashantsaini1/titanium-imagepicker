@@ -5,7 +5,10 @@ This module helps to select multiple images from an inbuilt gallery which render
 
 It also provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
-![Default State](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)
+| Default UI             |  Custom UI |
+|:-------------------------:|:-------------------------:|
+|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |
+
 
 ## Requirements & Installation
 * Ti SDK >= 6.0.0.GA
