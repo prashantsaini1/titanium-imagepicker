@@ -1,106 +1,90 @@
-Appcelerator Titanium Mobile Module Project
-===========================================
+# Titanium Android - Multi-Image picker module
+Meet the powerful Android multi-image picker module built by using RecyclerView & GridLayoutManager API, & the beautiful image loading [Glide Library](https://github.com/bumptech/glide).
 
-This is a skeleton Titanium Mobile Mobile module project.
+This module helps to select multiple images from an inbuilt gallery which renders gallery images blazingly fast.
 
+It also provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
-MODULE NAMING
--------------
+![Alt Text](https://github.com/prashantsaini1/titanium-scrollable-views/blob/master/default.png)
 
-Choose a unique module id for your module.  This ID usually follows a namespace
-convention using DNS notation.  For example, com.appcelerator.module.test.  This
-ID can only be used once by all public modules in Titanium.
+## Requirements & Installation
+* Ti SDK >= 6.0.0.GA
+* [Download module from here]()
+* Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
-
-GET STARTED
-------------
-
-1. Edit manifest with the appropriate details about your module.
-2. Edit LICENSE to add your license details.
-3. Place any assets (such as PNG files) that are required anywhere in the module folder.
-4. Edit the timodule.json and configure desired settings.
-5. Code and build.
+```
+<module platform="android">in.prashant.imagepicker</module>
+```
 
 
-DOCUMENTATION FOR YOUR MODULE
------------------------------
+# Methods
+1. **openGallery()**: Opens the inbuilt gallery with a 3x3 default grid-view. Takes following arguments (all are optional though) in a single dictionary object.
 
-You should provide at least minimal documentation for your module in `documentation` folder using the Markdown syntax.
+| Argument        | Description           | Default Value  |
+| -------------   |:--------------------- | :------------------------- |
+| colorPrimaryDark| Status bar background color as mentioned in Android theme attribute | dark tint of `colorPrimary` |
+| colorPrimary    |  Actionbar background color   | **blue-tint** |
+| backgroundColor | Background color behind grid-images    | **white-tint** |
+| coverViewColor    |  Background color of cover-view behind checkmar icon   | **semi-transparent black** |
+| checkMarkColor | Checkmark-icon color    | **orange-tint** |
+| title    |  Title of the gallery window   | **Select Pictures** |
+| doneButtonTitle | Title of the OK button which calls the callback method    | **DONE** |
+| columnCount    |  Number of grid-view columns to show in gallery   | **3** |
+| imageHeight | ImageView height in dp    | **square/width of image-view** |
+| dividerEnabled    |  Enable / disable dividers between grid-columns   | **true** |
+| dividerWidth | If `dividerEnabled` is true, use it to specify the width of dividers.    | **4 dp** |
+| colorPrimary    |  Actionbar background color   | **blue-tint** |
+| backgroundColor | Background color behind grid-images    | **white-tint** |
+| colorPrimary    |  Actionbar background color   | **blue-tint** |
+| backgroundColor | Background color behind grid-images    | **white-tint** |
+| callback | Callback method to get results into. Use below parameters to know the result. See below example for its usage    | **none** |
 
-For more information on the Markdown syntax, refer to this documentation at:
-
-<http://daringfireball.net/projects/markdown/>
-
-
-TEST HARNESS EXAMPLE FOR YOUR MODULE
-------------------------------------
-
-The `example` directory contains a skeleton application test harness that can be
-used for testing and providing an example of usage to the users of your module.
-
-
-BUILDING YOUR MODULE
---------------------
-
-Simply run `titanium build --platform <name of platform> --build-type production --dir /path/to/module`.
-You can omit the --dir option if your working directory is in the module's project directory.
-
-
-INSTALL YOUR MODULE
--------------------
-
-Mac OS X
---------
-Copy the distribution zip file into the `~/Library/Application Support/Titanium` folder
-
-Linux
------
-Copy the distribution zip file into the `~/.titanium` folder
-
-Windows
--------
-Copy the distribution zip file into the `C:\ProgramData\Titanium` folder
-
-
-REGISTER YOUR MODULE
---------------------
-
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
-
-<modules>
-	<module version="0.1">in.prashant.imagepicker</module>
-</modules>
-
-When you run your project, the compiler will combine your module along with its dependencies
-and assets into the application.
+```javascript
+var module = require('in.prashant.imagepicker');
+module.openGallery({
+  title : "Custom Title",
+  colorPrimaryDark : '#de3b30',
+  colorPrimary : '#de3b30',
+  columnCount : 4,
+  coverViewColor : '#aaffffff',
+  checkMarkColor : '#000000',
+  doneButtonTitle : "Proceed",
+  callback : function (e) {
+    if (e.success) {
+      var allImages = e.images;
+    }
+  }
+});
+```
 
 
-USING YOUR MODULE IN CODE
--------------------------
+2. **getImage()**: Returns the image as blob by passing String filepath.
 
-To use your module in code, you will need to require it.
+| Argument        | Description           | Optional  |
+| -------------   |:--------------------- | :------------------------- |
+| String filePath | Image file path to get its blob data | no |
 
-For example,
+</br>
 
-	var my_module = require('in.prashant.imagepicker');
-	my_module.foo();
+3. **resizeAsAspect()**: Returns the image as blob by resizing to specified width/height & keeping aspect ratio correct. Resizes using higher dimension from width/height. 
 
+| Argument        | Description           | Optional  |
+| -------------   |:--------------------- | :------------------------- |
+| String filePath | Image file path to get its blob data | no |
+| int width    |  Resized width   | no |
+| int height    |  Resized height   | no |
 
-TESTING YOUR MODULE
--------------------
+</br>
 
-To test with the script, execute:
+4. **resizeAsSame()**: Returns the image as blob by resizing to specified width/height exactly. Doesn't maintain aspect ratio.
 
-	titanium run --dir=YOURMODULEDIR
+| Argument        | Description           | Optional  |
+| -------------   |:--------------------- | :------------------------- |
+| String filePath | Image file path to get its blob data | no |
+| int width    |  Resized width   | no |
+| int height    |  Resized height   | no |
 
-This will execute the app.js in the example folder as a Titanium application.
+### Feel free to use this module
 
-
-DISTRIBUTING YOUR MODULE
--------------------------
-
-You can choose to manually distribute your module distribution zip file or through the Titanium Marketplace!
-
-
-Cheers!
+## Thanks & Credits
+* [Michael Gangolf](https://github.com/m1ga) for helping me out on Slack.
