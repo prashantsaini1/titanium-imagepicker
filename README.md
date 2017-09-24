@@ -5,11 +5,11 @@ This module helps to select multiple images from an inbuilt gallery which render
 
 It also provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
-![Alt Text](https://github.com/prashantsaini1/titanium-scrollable-views/blob/master/default.png)
+![Default State](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)
 
 ## Requirements & Installation
 * Ti SDK >= 6.0.0.GA
-* [Download module from here]()
+* [Download module from here](android/dist/in.prashant.imagepicker-android-1.0.0.zip)
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
 ```
