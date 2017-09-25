@@ -92,11 +92,18 @@ module.openGallery({
 | int width    |  Resized width   | no |
 | int height    |  Resized height   | no |
 
+
+
+<hr/>
+
 #### Coming features in next release.
 * Create a view-only gallery grid by providing image paths in an array. It will help to show images with efficient memory usage instead of loading them via Ti.UI.ImageView in scroll container.
 * Various color formats support
 
-#### Feel free to use this module & make it better with regular updates & bug reporting.
+<hr/>
+
+
+Feel free to use this module & make it better with regular updates & bug reporting.
 
 ## Thanks & Credits
 * [Michael Gangolf](https://github.com/m1ga) for helping me out on Slack.
