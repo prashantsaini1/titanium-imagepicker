@@ -21,7 +21,10 @@ It also provides tons of customization options to mixes well with your app UI & 
 
 
 # Methods
-1. **openGallery()**: Opens the inbuilt gallery with a 3x3 default grid-view. Takes following arguments (all are optional though) in a single dictionary object.
+1. **openGallery()**
+* Opens the inbuilt gallery with a 3x3 default grid-view. 
+* All arguments are optional. Color values are currently supported as #aarrggbb or #rrggbb. Will add more support in next release.
+* Takes following arguments in a single dictionary object.
 
 | Argument        | Description           | Default Value  |
 | -------------   |:--------------------- | :------------------------- |
@@ -32,7 +35,7 @@ It also provides tons of customization options to mixes well with your app UI & 
 | checkMarkColor | Checkmark-icon color    | **orange-tint** |
 | title    |  Title of the gallery window   | **Select Pictures** |
 | doneButtonTitle | Title of the OK button which calls the callback method    | **DONE** |
-| columnCount    |  Number of grid-view columns to show in gallery   | **3** |
+| columnCount    |  Number of grid-view columns to show in gallery   | **3** (2 to 5) |
 | imageHeight | ImageView height in dp    | **square/width of image-view** |
 | dividerEnabled    |  Enable / disable dividers between grid-columns   | **true** |
 | dividerWidth | If `dividerEnabled` is true, use it to specify the width of dividers.    | **4 dp** |
@@ -40,7 +43,7 @@ It also provides tons of customization options to mixes well with your app UI & 
 | backgroundColor | Background color behind grid-images    | **white-tint** |
 | colorPrimary    |  Actionbar background color   | **blue-tint** |
 | backgroundColor | Background color behind grid-images    | **white-tint** |
-| callback | Callback method to get results into. Use below parameters to know the result. See below example for its usage    | **none** |
+| callback | Callback method to get results into. See below example for its usage    | **none** |
 
 ```javascript
 var module = require('in.prashant.imagepicker');
@@ -55,6 +58,10 @@ module.openGallery({
   callback : function (e) {
     if (e.success) {
       var allImages = e.images;
+    } else if (e.cancel) {
+      // gallery result cancelled
+    } else {
+      alert(e.message);
     }
   }
 });
