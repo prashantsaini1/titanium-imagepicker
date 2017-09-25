@@ -1,9 +1,11 @@
 # Titanium Android - Multi-Image picker module
 Meet the powerful Android multi-image picker module built by using RecyclerView & GridLayoutManager API, & the beautiful image loading [Glide Library](https://github.com/bumptech/glide).
 
-This module helps to select multiple images from an inbuilt gallery which renders gallery images blazingly fast.
+* Efficient & blazing fast loading your entire gallery no matter there are 10k images or more.
+* Select multiple images with some useful image manipulation methods.
+* Image compression & resizing methods to further retrieve images blob data with efficient & mimimum memory usage. 
+* Provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
-It also provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
 | Default UI             |  Custom UI |
 |:-------------------------:|:-------------------------:|
@@ -68,7 +70,7 @@ module.openGallery({
 ```
 
 
-2. **getImage()**: Returns the image as blob by passing String filepath.
+2. **getImage(filePath)**: Returns the image as blob by passing String filepath.
 
 | Argument        | Description           | Optional  |
 | -------------   |:--------------------- | :------------------------- |
@@ -76,7 +78,7 @@ module.openGallery({
 
 </br>
 
-3. **resizeAsAspect()**: Returns the image as blob by resizing to specified width/height & keeping aspect ratio correct. Resizes using higher dimension from width/height. 
+3. **resizeAsAspect(filePath, width, height)**: Returns the image as blob by resizing to specified width/height & keeping aspect ratio correct. Resizes using higher dimension from width/height. 
 
 | Argument        | Description           | Optional  |
 | -------------   |:--------------------- | :------------------------- |
@@ -86,13 +88,17 @@ module.openGallery({
 
 </br>
 
-4. **resizeAsSame()**: Returns the image as blob by resizing to specified width/height exactly. Doesn't maintain aspect ratio.
+4. **resizeAsSame(filePath, width, height)**: Returns the image as blob by resizing to specified width/height exactly. Doesn't maintain aspect ratio.
 
 | Argument        | Description           | Optional  |
 | -------------   |:--------------------- | :------------------------- |
 | String filePath | Image file path to get its blob data | no |
 | int width    |  Resized width   | no |
 | int height    |  Resized height   | no |
+
+#### Coming features in next release.
+* Create a view-only gallery grid by providing image paths in an array. It will help to show images with efficient memory usage instead of loading them via Ti.UI.ImageView in scroll container.
+* Various color formats support
 
 #### Feel free to use this module & make it better with regular updates & bug reporting.
 
