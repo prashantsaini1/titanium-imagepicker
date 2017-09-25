@@ -28,24 +28,20 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 * All arguments are optional. Color values are currently supported as #aarrggbb or #rrggbb. Will add more support in next release.
 * Takes following arguments in a single dictionary object.
 
-| Argument        | Description           | Default Value  |
-| -------------   |:--------------------- | :------------------------- |
-| colorPrimaryDark| Status bar background color as mentioned in Android theme attribute | dark tint of `colorPrimary` |
-| colorPrimary    |  Actionbar background color   | **blue-tint** |
-| backgroundColor | Background color behind grid-images    | **white-tint** |
-| coverViewColor    |  Background color of cover-view behind checkmar icon   | **semi-transparent black** |
-| checkMarkColor | Checkmark-icon color    | **orange-tint** |
-| title    |  Title of the gallery window   | **Select Pictures** |
-| doneButtonTitle | Title of the OK button which calls the callback method    | **DONE** |
-| columnCount    |  Number of grid-view columns to show in gallery   | **3** (2 to 5) |
-| imageHeight | ImageView height in dp    | **square/width of image-view** |
-| dividerEnabled    |  Enable / disable dividers between grid-columns   | **true** |
-| dividerWidth | If `dividerEnabled` is true, use it to specify the width of dividers.    | **4 dp** |
-| colorPrimary    |  Actionbar background color   | **blue-tint** |
-| backgroundColor | Background color behind grid-images    | **white-tint** |
-| colorPrimary    |  Actionbar background color   | **blue-tint** |
-| backgroundColor | Background color behind grid-images    | **white-tint** |
-| callback | Callback method to get results into. See below example for its usage    | **none** |
+| Argument              | Description           | Default Value              |
+| --------------------- |:--------------------- | :------------------------- |
+|  String **colorPrimaryDark**     | Status bar background color | dark tint of `colorPrimary` |
+|  String **colorPrimary**      |  Actionbar background color   | blue-tint |
+|  String **backgroundColor**   | Background color behind grid-images    | white-tint |
+|  String **coverViewColor**    |  Background color of cover-view behind checkmar icon   | semi-transparent black |
+|     String **checkMarkColor** | Checkmark-icon color    | orange-tint |
+| String **title**              |  Title of the gallery window   | Select Pictures |
+| String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE |
+| int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) |
+| int **imageHeight**    | ImageView height in dp    | square/width of image-view |
+| boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
+| int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
+| function **callback**    | Callback method to get results into. See below example for its usage    | none |
 
 ```javascript
 var module = require('in.prashant.imagepicker');
