@@ -1,1 +1,2 @@
-Place your change log text here.  This file will be incorporated with your app at package time.
+--- v1.0.1 
+1. Added manifest tag to include activity automatically when Titanium app is compiled.

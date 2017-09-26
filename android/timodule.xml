@@ -6,9 +6,16 @@
 	-->
 	<iphone>
 	</iphone>
+	
 	<android xmlns:android="http://schemas.android.com/apk/res/android">
-		<activity android:name="in.prashant.imagepicker.Recycler_Activity"/>
+    	<manifest>
+    		<application>
+    			<activity android:name="in.prashant.imagepicker.Recycler_Activity"/>
+    		</application>
+    	</manifest>
 	</android>
+	
+	
 	<mobileweb>
 	</mobileweb>
 </ti:module>
