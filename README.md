@@ -14,7 +14,7 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 
 ## Requirements & Installation
 * Ti SDK >= 6.0.0.GA
-* [Download module from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/android/dist/in.prashant.imagepicker-android-1.0.0.zip)
+* [Download latest module version from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/android/dist/)
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
 ```
