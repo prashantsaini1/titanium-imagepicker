@@ -165,7 +165,8 @@ public class Recycler_Activity extends AppCompatActivity {
 
     private void setTotalCount() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setSubtitle(totalSelectedImages + " / " + adapter.size());
+        int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
+        actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
     }
     
     
