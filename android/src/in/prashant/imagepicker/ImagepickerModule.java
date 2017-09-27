@@ -58,6 +58,7 @@ public class ImagepickerModule extends KrollModule
 		checkAndSetParameters(2, Defaults.Params.IMAGE_HEIGHT, Defaults.IMAGE_HEIGHT, options, intent);
 		checkAndSetParameters(2, Defaults.Params.SHOW_DIVIDER, Defaults.SHOW_DIVIDER, options, intent);
 		checkAndSetParameters(2, Defaults.Params.DIVIDER_WIDTH, Defaults.DIVIDER_WIDTH, options, intent);
+		checkAndSetParameters(2, Defaults.Params.MAX_IMAGE_SELECTION, Defaults.MAX_IMAGE_SELECTION, options, intent);
 	    
 		return intent;
 	}

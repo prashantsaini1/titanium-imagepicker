@@ -214,14 +214,19 @@ public class Recycler_Activity extends AppCompatActivity {
                     	--totalSelectedImages;
                     	cover_view.setVisibility(View.GONE);
                     	checkMark.setVisibility(View.GONE);
-
+                    	adapter.get(position).selectionState = false;
                     } else {
-                    	++totalSelectedImages;
-                    	cover_view.setVisibility(View.VISIBLE);
-                    	checkMark.setVisibility(View.VISIBLE);
+                    	if (Defaults.MAX_IMAGE_SELECTION == 0 || totalSelectedImages < Defaults.MAX_IMAGE_SELECTION) {
+	                    	++totalSelectedImages;
+	                    	cover_view.setVisibility(View.VISIBLE);
+	                    	checkMark.setVisibility(View.VISIBLE);
+	                    	adapter.get(position).selectionState = true;
+                    	}
+                    	else {
+                    		Toast.makeText(getApplicationContext(), "You have selected the maximum allowed number of images", Toast.LENGTH_SHORT).show();
+                    	}
                     }
 
-                    adapter.get(position).selectionState = !isChecked;
                     setTotalCount();
                 }
             });
