@@ -37,6 +37,7 @@ import java.util.Collections;
 
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.util.TiRHelper;
 import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
 
@@ -64,6 +65,7 @@ public class Recycler_Activity extends AppCompatActivity {
     private int image_checkbox = 0;
     private int image_cover = 0;
     private int image_resolution = 0;
+    private boolean isMultipleSelection = true;
    
 
     @Override
@@ -73,18 +75,20 @@ public class Recycler_Activity extends AppCompatActivity {
         
         Defaults.setupInitialValues(getApplicationContext(), getIntent());
         setupIds();
+        
         setContentView(main_layout_id);
+        
+        isMultipleSelection = (1 != Defaults.MAX_IMAGE_SELECTION); 
 
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.parseColor(Defaults.STATUS_BAR_COLOR));
-            window.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BACKGROUND_COLOR)));
+            window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
         }
         
         ActionBar actionBar = getSupportActionBar(); 
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BAR_COLOR)));
+        actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -95,8 +99,9 @@ public class Recycler_Activity extends AppCompatActivity {
         mRecyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRecyclerView.setLayoutManager(new GridLayoutManager(Recycler_Activity.this, Defaults.GRID_SIZE));
 
-        FrameLayout f = (FrameLayout) findViewById(container);
-        f.addView(mRecyclerView);
+        FrameLayout frame_container = (FrameLayout) findViewById(container);
+        frame_container.addView(mRecyclerView);
+        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
         
         adapterSet = new PhotoAdapter(adapter);
         mRecyclerView.setAdapter(adapterSet);
@@ -115,8 +120,11 @@ public class Recycler_Activity extends AppCompatActivity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem menuitem = menu.add(Menu.NONE, DONE_MENU, Menu.NONE, Defaults.DONE_BTN_TITLE);
-        menuitem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	if (isMultipleSelection) {
+    		MenuItem menuitem = menu.add(Menu.NONE, DONE_MENU, Menu.NONE, Defaults.DONE_BTN_TITLE);
+            menuitem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	}
+        
         return true;
     }
     
@@ -129,7 +137,7 @@ public class Recycler_Activity extends AppCompatActivity {
                 break;
             
             case DONE_MENU:
-            	processImages();
+            	processImages("");
             	break;
             
             default:
@@ -162,11 +170,25 @@ public class Recycler_Activity extends AppCompatActivity {
     	}
     }
     
+    
+    private void setupMaxCountSize() {
+    	int maxCount = Defaults.MAX_IMAGE_SELECTION;
+    	
+    	// set max-image-select count to total no. of pics if passed count is <= 0 or
+    	// >= total no. of pics
+    	if ( (maxCount <= 0) || (maxCount >= adapter.size()) ) {		 
+    		Defaults.MAX_IMAGE_SELECTION = adapter.size();
+    	}
+    }
+    
 
     private void setTotalCount() {
-        ActionBar actionBar = getSupportActionBar();
-        int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
-        actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
+    	// show subtitle when there is a multiple selection of images
+    	if (isMultipleSelection) {
+    		ActionBar actionBar = getSupportActionBar();
+            int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
+            actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
+    	}
     }
     
     
@@ -178,11 +200,21 @@ public class Recycler_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<ImageAdapaterArray> items) {
-        	totalSelectedImages = 0;
-        	adapter.clear();
-        	adapter.addAll(items);
-            adapterSet.notifyDataSetChanged();
-            setTotalCount();
+        	if (items.size() > 0) {
+        		totalSelectedImages = 0;
+            	
+        		adapter.clear();
+            	adapter.addAll(items);
+            	
+            	setupMaxCountSize();
+            	setTotalCount();
+            	
+                adapterSet.notifyDataSetChanged();
+                
+        	} else {
+        		Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "No pictures available in your gallery.", Toast.LENGTH_SHORT).show();
+        		onBackPressed();
+        	}
         }
     }
    
@@ -204,31 +236,35 @@ public class Recycler_Activity extends AppCompatActivity {
             
             layout.getLayoutParams().height = Defaults.IMAGE_HEIGHT;
             
-            cover_view.setBackgroundColor(Color.parseColor(Defaults.COVER_VIEW_COLOR));
-            checkMark.setBackground( drawCircle(Recycler_Activity.this, Color.parseColor(Defaults.CHECKMARK_COLOR)) );
+            cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
+            checkMark.setBackground( drawCircle(Recycler_Activity.this, TiConvert.toColor(Defaults.CHECKMARK_COLOR)) );
 
             v.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
-                    boolean isChecked = adapter.get(position).selectionState;
+                    if (isMultipleSelection) {
+                    	boolean isChecked = adapter.get(position).selectionState;
 
-                    if (isChecked) {
-                    	--totalSelectedImages;
-                    	cover_view.setVisibility(View.GONE);
-                    	checkMark.setVisibility(View.GONE);
-                    	adapter.get(position).selectionState = false;
+                        if (isChecked) {
+                        	--totalSelectedImages;
+                        	setSelectionState(false, position);
+                        	adapter.get(position).selectionState = false;
+                        	
+                        } else {
+                        	if (totalSelectedImages < Defaults.MAX_IMAGE_SELECTION) {
+    	                    	++totalSelectedImages;
+    	                    	setSelectionState(true, position);
+    	                    	adapter.get(position).selectionState = true;
+    	                    	
+                        	} else {
+                        		Toast.makeText(getApplicationContext(), "You have selected the maximum allowed number of images", Toast.LENGTH_SHORT).show();
+                        	}
+                        }
+
+                        setTotalCount();
+                        
                     } else {
-                    	if (Defaults.MAX_IMAGE_SELECTION == 0 || totalSelectedImages < Defaults.MAX_IMAGE_SELECTION) {
-	                    	++totalSelectedImages;
-	                    	cover_view.setVisibility(View.VISIBLE);
-	                    	checkMark.setVisibility(View.VISIBLE);
-	                    	adapter.get(position).selectionState = true;
-                    	}
-                    	else {
-                    		Toast.makeText(getApplicationContext(), "You have selected the maximum allowed number of images", Toast.LENGTH_SHORT).show();
-                    	}
+                    	processImages(adapter.get(position).imagePath);
                     }
-
-                    setTotalCount();
                 }
             });
         }
@@ -348,28 +384,33 @@ public class Recycler_Activity extends AppCompatActivity {
     }
     	
     
-    private void processImages() {
-        if (0 == totalSelectedImages) {
-            Toast.makeText(getApplicationContext(), "No pictures selected.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final int totalCount = adapter.size();
-        int totalImages = totalSelectedImages;
-        int i = 0;
-
-        ArrayList<CharSequence> imagePaths = new ArrayList<CharSequence>();
-
-        while((totalImages > 0) && (i < totalCount)) {
-            if (adapter.get(i).selectionState) {
-                imagePaths.add(adapter.get(i).imagePath);
-                --totalImages;
+    private void processImages(String path) {
+    	ArrayList<CharSequence> imagePaths = new ArrayList<CharSequence>();
+    	
+    	if (isMultipleSelection) {
+    		if (0 == totalSelectedImages) {
+                Toast.makeText(getApplicationContext(), "No pictures selected.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            ++i;
-        }
+            final int totalCount = adapter.size();
+            int totalImages = totalSelectedImages;
+            int i = 0;
 
-        Intent intent = new Intent();
+            while((totalImages > 0) && (i < totalCount)) {
+                if (adapter.get(i).selectionState) {
+                    imagePaths.add(adapter.get(i).imagePath);
+                    --totalImages;
+                }
+
+                ++i;
+            }
+            
+    	} else {
+    		imagePaths.add(path);
+    	}
+    	
+    	Intent intent = new Intent();
         intent.putExtra(Defaults.Params.IMAGES, imagePaths);
         intent.putExtra(TiC.PROPERTY_SUCCESS, true);
         setResult(RESULT_OK, intent);
@@ -378,7 +419,7 @@ public class Recycler_Activity extends AppCompatActivity {
     
     
     @Override
-    public void onBackPressed () {
+    public void onBackPressed() {
         if (totalSelectedImages > 0) {      // if images are selected, then unselect them on back-press
             int i = 0;
             final int totalCount = adapter.size();
@@ -397,6 +438,7 @@ public class Recycler_Activity extends AppCompatActivity {
 
         } else {
             setResult(RESULT_CANCELED);
+            adapter.clear();
             super.onBackPressed();
         }
     }
