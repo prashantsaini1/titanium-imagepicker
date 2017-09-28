@@ -105,8 +105,13 @@ public class Defaults {
 		Defaults.CHECKMARK_COLOR = checkTransparentColors(Defaults.CHECKMARK_COLOR);
 	}
 	
-	private static String checkTransparentColors(String key) {
-		return (key.equalsIgnoreCase("transparent")) ? "#00000000" : key;	// transparent color hex
+	private static String checkTransparentColors(Object key) {
+		if (key instanceof String) {
+			String color =  (String) key;
+			return (color.equalsIgnoreCase("transparent")) ? "#00000000" : color;	// transparent color hex
+		}
+		
+		return "#00000000";
 	}
 }
 

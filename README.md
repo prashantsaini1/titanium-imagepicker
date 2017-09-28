@@ -41,7 +41,7 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 | int **imageHeight**    | ImageView height in dp    | square/width of image-view |
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
-| int **maxImageSelection**     | Optional. Allows specifing a maximum number of images that can be selected. If 0 than no limit will be applied.    | 0 |
+| int **maxImageSelection**     | Maximum number of images to select. Value <=0 will be considered as No Limit.    | No limit |
 | function **callback**    | Callback method to get results into. See below example for its usage    | none |
 
 ```javascript
@@ -97,17 +97,19 @@ module.openGallery({
 
 <hr/>
 
-#### Coming features in next release.
-* Create a view-only gallery grid by providing image paths in an array. It will help to show images with efficient memory usage instead of loading them via Ti.UI.ImageView in scroll container.
-* Various color formats support
+### Changelog
+**v1.1.0**
+* Maximum image selection count added. Can be also passed as 1 to select only 1 image instantly.
+* Color formats supported now: RGB, ARGB, RRGGBB, AARRGGBB, Color Name
+
+</br>
 
 <hr/>
-
-
-Feel free to use this module & make it better with regular updates & bug reporting.
+<hr/>
 
 ## Thanks & Credits
 * [Michael Gangolf](https://github.com/m1ga) for helping me out on Slack.
+
 
 ## LICENSE
     Copyright 2017 Prashant Saini

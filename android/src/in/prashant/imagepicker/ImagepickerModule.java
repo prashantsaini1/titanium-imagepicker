@@ -15,7 +15,9 @@ import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBlob;
 import org.appcelerator.titanium.util.TiActivitySupport;
+import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.kroll.common.Log;
+
 import android.os.Build;
 import android.app.Activity;
 import android.content.Intent;
@@ -40,8 +42,7 @@ public class ImagepickerModule extends KrollModule
 	
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-		Log.d(Defaults.LCAT, "inside onAppCreate");
-		// put module init code that needs to run when the application is created
+		
 	}
 	
 	private Intent prepareExtrasForIntent(Intent intent, KrollDict options) {

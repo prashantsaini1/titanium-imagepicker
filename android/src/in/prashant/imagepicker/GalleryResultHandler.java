@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollObject;
-import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiActivityResultHandler;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+
 
 
 public class GalleryResultHandler implements TiActivityResultHandler{
