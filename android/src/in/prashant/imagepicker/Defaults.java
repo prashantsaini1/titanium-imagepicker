@@ -24,6 +24,7 @@ public class Defaults {
 	public static int IMAGE_HEIGHT;
 	public static int SHOW_DIVIDER;
 	public static int DIVIDER_WIDTH;
+	public static int MAX_IMAGE_SELECTION;
 	
 	protected static class Params {
 		static final String STATUS_BAR_COLOR = "colorPrimaryDark";		
@@ -37,6 +38,7 @@ public class Defaults {
 		static final String IMAGE_HEIGHT = "imageHeight";
 		static final String SHOW_DIVIDER = "dividerEnabled";
 		static final String DIVIDER_WIDTH = "dividerWidth";
+		static final String MAX_IMAGE_SELECTION = "maxImageSelection";
 		
 		static final String CALLBACK = "callback";
 		static final String IMAGES = "images";
@@ -55,6 +57,7 @@ public class Defaults {
 		Defaults.IMAGE_HEIGHT = 0;
 		Defaults.SHOW_DIVIDER = 1;
 		Defaults.DIVIDER_WIDTH = 4;
+		Defaults.MAX_IMAGE_SELECTION = 0;
 	}
 	
 	
@@ -75,6 +78,7 @@ public class Defaults {
 			Defaults.IMAGE_HEIGHT = bundle.getInt(Params.IMAGE_HEIGHT);
 			Defaults.SHOW_DIVIDER = bundle.getInt(Params.SHOW_DIVIDER);
 			Defaults.DIVIDER_WIDTH = bundle.getInt(Params.DIVIDER_WIDTH);
+			Defaults.MAX_IMAGE_SELECTION = bundle.getInt(Params.MAX_IMAGE_SELECTION);
 		}
 		
 		// set max-column count to 5

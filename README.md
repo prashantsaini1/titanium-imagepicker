@@ -41,6 +41,7 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 | int **imageHeight**    | ImageView height in dp    | square/width of image-view |
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
+| int **maxImageSelection**     | Optional. Allows specifing a maximum number of images that can be selected. If 0 than no limit will be applied.    | 0 |
 | function **callback**    | Callback method to get results into. See below example for its usage    | none |
 
 ```javascript
