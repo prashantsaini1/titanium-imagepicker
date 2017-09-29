@@ -84,11 +84,14 @@ public class Recycler_Activity extends AppCompatActivity {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
+            if (!Defaults.STATUS_BAR_COLOR.isEmpty())
+            	window.setStatusBarColor(Color.parseColor(Defaults.STATUS_BAR_COLOR));
+            window.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BACKGROUND_COLOR)));
         }
         
-        ActionBar actionBar = getSupportActionBar(); 
-        actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+        ActionBar actionBar = getSupportActionBar();
+        if (!Defaults.BAR_COLOR.isEmpty())
+        	actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BAR_COLOR)));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);

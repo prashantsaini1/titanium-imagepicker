@@ -46,8 +46,8 @@ public class Defaults {
 	
 
 	public static void resetValues() {
-		Defaults.STATUS_BAR_COLOR = "#003f8f";		
-		Defaults.BAR_COLOR = "#0069c0";		
+		Defaults.STATUS_BAR_COLOR = "";		
+		Defaults.BAR_COLOR = "";		
 		Defaults.BACKGROUND_COLOR = "#f8f8f8";
 		Defaults.COVER_VIEW_COLOR = "#99000000";
 		Defaults.CHECKMARK_COLOR = "#ff8f00";		
