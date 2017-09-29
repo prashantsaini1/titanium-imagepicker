@@ -30,18 +30,18 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 
 | Argument              | Description           | Default Value              |
 | --------------------- |:--------------------- | :------------------------- |
-|  String **colorPrimaryDark**     | Status bar background color | dark tint of `colorPrimary` |
-|  String **colorPrimary**      |  Actionbar background color   | blue-tint |
+|  String **colorPrimaryDark**     | Status bar background color | Same as app theme |
+|  String **colorPrimary**      |  Actionbar background color   | Same as app theme |
 |  String **backgroundColor**   | Background color behind grid-images    | white-tint |
 |  String **coverViewColor**    |  Background color of cover-view behind checkmar icon   | semi-transparent black |
 |     String **checkMarkColor** | Checkmark-icon color    | orange-tint |
 | String **title**              |  Title of the gallery window   | Select Pictures |
 | String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE |
 | int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) |
-| int **imageHeight**    | ImageView height in dp    | square/width of image-view |
+| int **imageHeight**    | ImageView height in dp    | same as width |
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
-| int **maxImageSelection**     | Maximum number of images to select. Value <=0 will be considered as No Limit.    | No limit |
+| int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit |
 | function **callback**    | Callback method to get results into. See below example for its usage    | none |
 
 ```javascript
@@ -100,7 +100,7 @@ module.openGallery({
 ### Changelog
 **v1.1.0**
 * Maximum image selection count added. Can be also passed as 1 to select only 1 image instantly.
-* Color formats supported now: RGB, ARGB, RRGGBB, AARRGGBB, Color Name
+* Color formats supported now: RGB, ARGB, RRGGBB, AARRGGBB, & color names
 
 </br>
 
