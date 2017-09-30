@@ -7,9 +7,9 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 * Provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
 
-| Default UI             |  Custom UI |
-|:-------------------------:|:-------------------------:|
-|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |
+| Default UI             |  Custom square UI |  Custom circle UI
+|:-------------------------:|:-------------------------:|:------------------------:|
+|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_circle.png)  |
 
 
 ## Requirements & Installation
@@ -42,6 +42,10 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
 | int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit |
+| String **maxImageMessage**     | Message to show when max limit is reached.     | - |
+| int **shape**     | Constant as Module.SHAPE_CIRCLE or  Module.SHAPE_SQUARE     | Module.SHAPE_SQUARE |
+| int **circleRadius**     | Radius of the circle if shape is Module.SHAPE_CIRCLE     | Complete circle |
+| int **circlePadding**     | Padding between circular images similar to divider-width     | 5 |
 | function **callback**    | Callback method to get results into. See below example for its usage    | none |
 
 ```javascript

@@ -12,6 +12,8 @@ public class Defaults {
 	public static final String LCAT = "ImagepickerModule";
 	public static final int REQUEST_CODE = 111;
 	public static final int QUALITY = 60;
+	public static final int SHAPE_SQUARE = 1;		
+	public static final int SHAPE_CIRCLE = 2;	
 
 	public static String STATUS_BAR_COLOR;
 	public static String BAR_COLOR;		
@@ -20,11 +22,16 @@ public class Defaults {
 	public static String CHECKMARK_COLOR;
 	public static String TITLE;
 	public static String DONE_BTN_TITLE;
+	public static String MAX_IMAGE_MSG;
 	public static int GRID_SIZE;
 	public static int IMAGE_HEIGHT;
 	public static int SHOW_DIVIDER;
 	public static int DIVIDER_WIDTH;
 	public static int MAX_IMAGE_SELECTION;
+	public static int SHAPE;
+	public static int CIRCLE_RADIUS;
+	public static int CIRCLE_PADDING;
+	
 	
 	protected static class Params {
 		static final String STATUS_BAR_COLOR = "colorPrimaryDark";		
@@ -39,6 +46,10 @@ public class Defaults {
 		static final String SHOW_DIVIDER = "dividerEnabled";
 		static final String DIVIDER_WIDTH = "dividerWidth";
 		static final String MAX_IMAGE_SELECTION = "maxImageSelection";
+		static final String MAX_IMAGE_MSG = "maxImageMessage";
+		static final String SHAPE = "shape";
+		static final String CIRCLE_RADIUS = "circleRadius";
+		static final String CIRCLE_PADDING = "circlePadding";
 		
 		static final String CALLBACK = "callback";
 		static final String IMAGES = "images";
@@ -58,6 +69,10 @@ public class Defaults {
 		Defaults.SHOW_DIVIDER = 1;
 		Defaults.DIVIDER_WIDTH = 4;
 		Defaults.MAX_IMAGE_SELECTION = 0;
+		Defaults.MAX_IMAGE_MSG = "You have selected maximum no. of allowed images.";
+		Defaults.SHAPE = Defaults.SHAPE_SQUARE;
+		Defaults.CIRCLE_RADIUS = 0;
+		Defaults.CIRCLE_PADDING = 5;
 	}
 	
 	
@@ -73,12 +88,16 @@ public class Defaults {
 			
 			Defaults.TITLE = "" + bundle.getString(Params.TITLE);
 			Defaults.DONE_BTN_TITLE = "" + bundle.getString(Params.DONE_BTN_TITLE);
+			Defaults.MAX_IMAGE_MSG = "" + bundle.getString(Params.MAX_IMAGE_MSG);
 			
 			Defaults.GRID_SIZE = bundle.getInt(Params.GRID_SIZE);
 			Defaults.IMAGE_HEIGHT = bundle.getInt(Params.IMAGE_HEIGHT);
 			Defaults.SHOW_DIVIDER = bundle.getInt(Params.SHOW_DIVIDER);
 			Defaults.DIVIDER_WIDTH = bundle.getInt(Params.DIVIDER_WIDTH);
 			Defaults.MAX_IMAGE_SELECTION = bundle.getInt(Params.MAX_IMAGE_SELECTION);
+			Defaults.SHAPE = bundle.getInt(Params.SHAPE);
+			Defaults.CIRCLE_RADIUS = bundle.getInt(Params.CIRCLE_RADIUS);
+			Defaults.CIRCLE_PADDING = bundle.getInt(Params.CIRCLE_PADDING);
 		}
 		
 		// set max-column count to 5
@@ -90,13 +109,21 @@ public class Defaults {
 		}
 		
 		// set divider width = 0 if dividers are not enabled
-		if (Defaults.SHOW_DIVIDER != 1) {
-			Defaults.DIVIDER_WIDTH = 0;
-		}
+		if (Defaults.SHOW_DIVIDER != 1) { Defaults.DIVIDER_WIDTH = 0; }
+		
+		if (Defaults.CIRCLE_RADIUS < 0) { Defaults.CIRCLE_RADIUS = 0; }
+		if (Defaults.CIRCLE_PADDING < 0) { Defaults.CIRCLE_PADDING = 5; }
 		
 		// this will make images square as width will be auto-set by grid-view
 		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-		Defaults.IMAGE_HEIGHT = (displayMetrics.widthPixels - ((Defaults.GRID_SIZE - 1) * Defaults.DIVIDER_WIDTH)) / Defaults.GRID_SIZE;
+					
+		if (Defaults.SHAPE == Defaults.SHAPE_CIRCLE) {
+			Defaults.IMAGE_HEIGHT = displayMetrics.widthPixels / Defaults.GRID_SIZE;
+			
+		} else {
+			Defaults.SHAPE = Defaults.SHAPE_SQUARE; 
+			Defaults.IMAGE_HEIGHT = (displayMetrics.widthPixels - ((Defaults.GRID_SIZE - 1) * Defaults.DIVIDER_WIDTH)) / Defaults.GRID_SIZE;
+		}
 		
 		Defaults.STATUS_BAR_COLOR = checkTransparentColors(Defaults.STATUS_BAR_COLOR);
 		Defaults.BAR_COLOR = checkTransparentColors(Defaults.BAR_COLOR);

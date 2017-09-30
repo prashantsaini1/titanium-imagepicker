@@ -15,7 +15,6 @@ import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBlob;
 import org.appcelerator.titanium.util.TiActivitySupport;
-import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.kroll.common.Log;
 
 import android.os.Build;
@@ -32,7 +31,10 @@ import android.widget.Toast;
 public class ImagepickerModule extends KrollModule
 {	
 	@Kroll.constant
-	public static final String EXTERNAL_NAME = "Constant";
+	public static final int SHAPE_CIRCLE = Defaults.SHAPE_CIRCLE;
+	
+	@Kroll.constant
+	public static final int SHAPE_SQUARE = Defaults.SHAPE_SQUARE;
 	
 
 	public ImagepickerModule() {
@@ -55,11 +57,15 @@ public class ImagepickerModule extends KrollModule
 		checkAndSetParameters(1, Defaults.Params.CHECKMARK_COLOR, Defaults.CHECKMARK_COLOR, options, intent);
 		checkAndSetParameters(1, Defaults.Params.TITLE, Defaults.TITLE, options, intent);
 		checkAndSetParameters(1, Defaults.Params.DONE_BTN_TITLE, Defaults.DONE_BTN_TITLE, options, intent);
+		checkAndSetParameters(1, Defaults.Params.MAX_IMAGE_MSG, Defaults.MAX_IMAGE_MSG, options, intent);
 		checkAndSetParameters(2, Defaults.Params.GRID_SIZE, Defaults.GRID_SIZE, options, intent);
 		checkAndSetParameters(2, Defaults.Params.IMAGE_HEIGHT, Defaults.IMAGE_HEIGHT, options, intent);
 		checkAndSetParameters(2, Defaults.Params.SHOW_DIVIDER, Defaults.SHOW_DIVIDER, options, intent);
 		checkAndSetParameters(2, Defaults.Params.DIVIDER_WIDTH, Defaults.DIVIDER_WIDTH, options, intent);
 		checkAndSetParameters(2, Defaults.Params.MAX_IMAGE_SELECTION, Defaults.MAX_IMAGE_SELECTION, options, intent);
+		checkAndSetParameters(2, Defaults.Params.SHAPE, Defaults.SHAPE, options, intent);
+		checkAndSetParameters(2, Defaults.Params.CIRCLE_RADIUS, Defaults.CIRCLE_RADIUS, options, intent);
+		checkAndSetParameters(2, Defaults.Params.CIRCLE_PADDING, Defaults.CIRCLE_PADDING, options, intent);
 	    
 		return intent;
 	}

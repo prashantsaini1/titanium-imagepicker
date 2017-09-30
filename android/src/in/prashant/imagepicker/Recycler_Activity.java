@@ -1,13 +1,12 @@
 package in.prashant.imagepicker;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
@@ -41,7 +40,12 @@ import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.util.TiRHelper;
 import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
 
-import com.bumptech.glide.*;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 /**
  * Created by Prashant Saini on 16/09/17.
@@ -50,8 +54,8 @@ import com.bumptech.glide.*;
 public class Recycler_Activity extends AppCompatActivity {
 	private static final String TAG = "ImagePicker";
 	private static final int DONE_MENU = 111;
-	private static final float RES_X = 0.80f;
     
+	private RequestOptions options;
 	private RecyclerView mRecyclerView;
     private ArrayList<ImageAdapaterArray> adapter = new ArrayList<ImageAdapaterArray>();
     private PhotoAdapter adapterSet;
@@ -64,34 +68,41 @@ public class Recycler_Activity extends AppCompatActivity {
     private int image_id = 0;
     private int image_checkbox = 0;
     private int image_cover = 0;
-    private int image_resolution = 0;
+    private int error_image = 0;
     private boolean isMultipleSelection = true;
+    private boolean isShapeCircle = false;
    
 
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         Defaults.setupInitialValues(getApplicationContext(), getIntent());
         setupIds();
-        
         setContentView(main_layout_id);
         
         isMultipleSelection = (1 != Defaults.MAX_IMAGE_SELECTION); 
+        isShapeCircle = Defaults.SHAPE_CIRCLE == Defaults.SHAPE;
 
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            if (!Defaults.STATUS_BAR_COLOR.isEmpty())
-            	window.setStatusBarColor(Color.parseColor(Defaults.STATUS_BAR_COLOR));
-            window.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BACKGROUND_COLOR)));
+            
+            if (!Defaults.STATUS_BAR_COLOR.isEmpty()) {
+            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
+            }
+            
+            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR));
         }
         
         ActionBar actionBar = getSupportActionBar();
-        if (!Defaults.BAR_COLOR.isEmpty())
-        	actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(Defaults.BAR_COLOR)));
+        
+        if (!Defaults.BAR_COLOR.isEmpty()) {
+        	actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+        }
+        	
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -109,12 +120,11 @@ public class Recycler_Activity extends AppCompatActivity {
         adapterSet = new PhotoAdapter(adapter);
         mRecyclerView.setAdapter(adapterSet);
         
-        if (1 == Defaults.SHOW_DIVIDER) {
+        if ( (1 == Defaults.SHOW_DIVIDER) && (!isShapeCircle) ) {
         	mRecyclerView.addItemDecoration(new DividerDecoration());
         }
         
-        // set image resolution
-        image_resolution = Math.round(Defaults.IMAGE_HEIGHT * RES_X);
+        setupGlideOptions(); // set glide-options to apply on image
         
         // Get gallery photos in a new UI thread like AsyncTask to update UI changes properly
         new FetchImages().execute();
@@ -167,6 +177,7 @@ public class Recycler_Activity extends AppCompatActivity {
     		image_id = TiRHelper.getResource("id.photo_gallery_image_view");
     		image_cover = TiRHelper.getResource("id.coverView");
     		image_checkbox = TiRHelper.getResource("id.checkbox");
+    		error_image = TiRHelper.getResource("drawable.no_image");
     		
     	} catch (ResourceNotFoundException e) {
     		Log.i(TAG, "XML resources could not be found!!!");
@@ -192,6 +203,27 @@ public class Recycler_Activity extends AppCompatActivity {
             int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
             actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
     	}
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+	private void setupGlideOptions() {
+    	options = new RequestOptions();
+    	
+    	if (isShapeCircle) {
+    		if (Defaults.CIRCLE_RADIUS > 0) {
+    			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
+    			
+    		} else {
+    			options.circleCrop();
+    		}
+    		
+    	} else {
+    		options.centerCrop();
+    	}
+    	
+    	options.error(error_image);
+    	options.priority(Priority.HIGH);
     }
     
     
@@ -233,14 +265,27 @@ public class Recycler_Activity extends AppCompatActivity {
             super(v);
             
             layout = (RelativeLayout) v.findViewById(image_container_id);
-            imView = (ImageView) v.findViewById(image_id);
             cover_view = (View) v.findViewById(image_cover);
-            checkMark = (ImageView) v.findViewById(image_checkbox);
+            imView = (ImageView) v.findViewById(image_id);
             
             layout.getLayoutParams().height = Defaults.IMAGE_HEIGHT;
             
-            cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
-            checkMark.setBackground( drawCircle(Recycler_Activity.this, TiConvert.toColor(Defaults.CHECKMARK_COLOR)) );
+            checkMark = (ImageView) v.findViewById(image_checkbox);
+            drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR), false);
+            
+            if (isShapeCircle) {
+            	int pad = Defaults.CIRCLE_PADDING;
+            	imView.setPadding(pad, pad, pad, pad);
+            	cover_view.setPadding(pad, pad, pad, pad);
+            	
+            	cover_view.getLayoutParams().height = Defaults.IMAGE_HEIGHT - 2 * pad;
+            	cover_view.getLayoutParams().width = Defaults.IMAGE_HEIGHT - 2 * pad;
+                
+            	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR), true);
+            	
+            } else {
+            	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
+            }
 
             v.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
@@ -259,7 +304,7 @@ public class Recycler_Activity extends AppCompatActivity {
     	                    	adapter.get(position).selectionState = true;
     	                    	
                         	} else {
-                        		Toast.makeText(getApplicationContext(), "You have selected the maximum allowed number of images", Toast.LENGTH_SHORT).show();
+                        		Toast.makeText(getApplicationContext(), Defaults.MAX_IMAGE_MSG, Toast.LENGTH_SHORT).show();
                         	}
                         }
 
@@ -286,12 +331,15 @@ public class Recycler_Activity extends AppCompatActivity {
         }
 
         private void setImagePath(String path) {
-        	Glide  
-            .with(getApplicationContext())
-            .load(new File(path))
-            .override(image_resolution, image_resolution)
-            .centerCrop()
-            .into(imView);
+        	try {
+        		Glide  
+                .with(getApplicationContext())
+                .load(new File(path))
+                .apply(options)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imView);
+        		
+        	} catch(Exception exc) {}
         }
     }
 
@@ -380,10 +428,19 @@ public class Recycler_Activity extends AppCompatActivity {
     }
     
     
-    private ShapeDrawable drawCircle(Context context, int color) {
-        ShapeDrawable oval = new ShapeDrawable (new OvalShape());
-        oval.getPaint ().setColor (color);
-        return oval;
+    private void drawBackground(View v, int color, boolean isCircle) {
+    	if (isCircle) {
+            GradientDrawable gd = new GradientDrawable();
+            gd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+            gd.setColors(new int[]{color, Color.TRANSPARENT });
+            gd.setGradientRadius((Defaults.IMAGE_HEIGHT - Defaults.CIRCLE_PADDING)/2);
+            v.setBackground(gd);
+            
+        } else {
+            ShapeDrawable oval = new ShapeDrawable (new OvalShape());
+            oval.getPaint().setColor(color);
+            v.setBackground(oval);
+        }
     }
     	
     
@@ -423,6 +480,8 @@ public class Recycler_Activity extends AppCompatActivity {
     
     @Override
     public void onBackPressed() {
+    	mRecyclerView.stopScroll();
+    	
         if (totalSelectedImages > 0) {      // if images are selected, then unselect them on back-press
             int i = 0;
             final int totalCount = adapter.size();
@@ -441,7 +500,6 @@ public class Recycler_Activity extends AppCompatActivity {
 
         } else {
             setResult(RESULT_CANCELED);
-            adapter.clear();
             super.onBackPressed();
         }
     }
