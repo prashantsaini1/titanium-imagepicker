@@ -102,6 +102,14 @@ module.openGallery({
 <hr/>
 
 ### Changelog
+
+**v1.2.0**
+* Upgraded to Glide 4.1.1
+* Added circular shape option for image-views with circular radius & padding.
+* Added option to define message on max limit reach.
+* Added error image drawable when no image is found, can be replaced by your custom drawable file with same name as 'no_image.png'.
+
+
 **v1.1.0**
 * Maximum image selection count added. Can be also passed as 1 to select only 1 image instantly.
 * Color formats supported now: RGB, ARGB, RRGGBB, AARRGGBB, & color names
