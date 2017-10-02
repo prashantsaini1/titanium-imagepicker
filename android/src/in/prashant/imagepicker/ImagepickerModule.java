@@ -119,7 +119,7 @@ public class ImagepickerModule extends KrollModule
 		GalleryResultHandler handler = new GalleryResultHandler(callback, getKrollObject());
 		
 		Activity activity = TiApplication.getAppCurrentActivity();
-		Intent intent = new Intent(activity, Recycler_Activity.class);
+		Intent intent = new Intent(activity, ImagePickerActivity.class);
 		
 		if (isOption) {
 			((TiActivitySupport) activity).launchActivityForResult(prepareExtrasForIntent(intent, options), Defaults.REQUEST_CODE, handler);

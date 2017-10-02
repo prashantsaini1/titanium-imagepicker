@@ -7,7 +7,7 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 * Provides tons of customization options to mixes well with your app UI & does not feel like 3rd party module/library.
 
 
-| Default UI             |  Custom square UI |  Custom circle UI
+| Default UI             |  Custom square UI |  Custom circle UI   |
 |:-------------------------:|:-------------------------:|:------------------------:|
 |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_circle.png)  |
 
@@ -116,7 +116,7 @@ module.openGallery({
 
 </br>
 
-<hr/>
+
 <hr/>
 
 ## Thanks & Credits

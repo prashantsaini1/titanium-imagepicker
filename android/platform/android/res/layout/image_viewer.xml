@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="120dp">
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/photo_gallery_image_view"
+        android:background="#00000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop" />
+
+
+    <TextView
+        android:id="@+id/imageTitle"
+        android:textColor="#fff"
+        android:text="Hello There, afafsjlkjfklsaljkfafjkla asfkjas faslkjfakl sfjakls falksjfa lsjfa lskjal kjflakjsf slakjfal fjzz"
+        android:padding="5dp"
+        android:background="#5000"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
