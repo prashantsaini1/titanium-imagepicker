@@ -69,7 +69,8 @@ module.openGallery({
 });
 ```
 
-2. **createCustomGallery(args)**: Open a custom gallery with defined images. See following code on its usage.
+2. **createCustomGallery(args)**:
+* Open a custom gallery with defined images. See following code on its usage.
 
 | Argument        | Description           | Optional  |
 | -------------   |:--------------------- | :------------------------- |
@@ -101,7 +102,9 @@ module.createCustomGallery({
 	}]
 });
 ```
-![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote.png)
+| 2 Column UI   |   3 Column UI   |
+|:-------------------------:|:-------------------------:|
+|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote_2.png)  |
 
 </br>
 
