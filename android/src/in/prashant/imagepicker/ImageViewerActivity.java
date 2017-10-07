@@ -2,24 +2,15 @@ package in.prashant.imagepicker;
 
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +20,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.util.TiRHelper;
 import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
@@ -54,30 +40,32 @@ import com.bumptech.glide.request.RequestOptions;
 
 public class ImageViewerActivity extends AppCompatActivity {
 	private static final String TAG = "ImageViewerActivity";
-	private static final int DONE_MENU = 111;
     
 	private RequestOptions options;
 	private RecyclerView mRecyclerView;
-    private ArrayList<ImageAdapaterArray> adapter = new ArrayList<ImageAdapaterArray>();
+	private ArrayList<ImageViewerInfo> imagesAdapter = new ArrayList<ImageViewerInfo>();
     private PhotoAdapter adapterSet;
     
     
     private int frame_layout = 0;
     private int frame_layout_id = 0;
-    private int image_viewer_layout = 0;
-    private int image_viewer_container = 0;
+    private int image_view_layout = 0;
+    private int image_view_container = 0;
     private int image_id = 0;
     private int title_id = 0;
-    private int error_image = 0;
+    private int placeholder_image = 0;
     private boolean isShapeCircle = false;
    
+  
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        Defaults.setupInitialValues(getApplicationContext(), getIntent());
+        Intent intent = getIntent();
+        imagesAdapter = intent.getExtras().getParcelableArrayList(Defaults.Params.IMAGES);
+        
+        Defaults.setupInitialValues(getApplicationContext(), intent);
         setupIds();
         setContentView(frame_layout);
         
@@ -115,7 +103,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         frame_container.addView(mRecyclerView);
         frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
         
-        adapterSet = new PhotoAdapter(adapter);
+        adapterSet = new PhotoAdapter(imagesAdapter);
         mRecyclerView.setAdapter(adapterSet);
         
         if ( (1 == Defaults.SHOW_DIVIDER) && (!isShapeCircle) ) {
@@ -153,12 +141,12 @@ public class ImageViewerActivity extends AppCompatActivity {
     		frame_layout = TiRHelper.getResource("layout.container");
     		frame_layout_id = TiRHelper.getResource("id.container");
     		
-    		image_viewer_layout = TiRHelper.getResource("layout.image_viewer");
-    		image_viewer_container = TiRHelper.getResource("id.layout_container");
+    		image_view_layout = TiRHelper.getResource("layout.image_viewer");
+    		image_view_container = TiRHelper.getResource("id.image_container");
     		image_id = TiRHelper.getResource("id.photo_gallery_image_view");
     		title_id = TiRHelper.getResource("id.imageTitle");
     		
-    		error_image = TiRHelper.getResource("drawable.no_image");
+    		placeholder_image = TiRHelper.getResource("drawable.loading_placeholder");
     		
     	} catch (ResourceNotFoundException e) {
     		Log.i(TAG, "XML resources could not be found!!!");
@@ -167,25 +155,21 @@ public class ImageViewerActivity extends AppCompatActivity {
     
     
     @SuppressWarnings("unchecked")
-	private void setupGlideOptions() {
-    	options = new RequestOptions();
-    	int imageDim = (int) 0.6 * Defaults.IMAGE_HEIGHT; 
-    	options.override(imageDim, imageDim);
-    	
-    	if (isShapeCircle) {
-    		if (Defaults.CIRCLE_RADIUS > 0) {
-    			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
-    			
-    		} else {
-    			options.circleCrop();
-    		}
-    		
-    	} else {
-    		options.centerCrop();
-    	}
-    	
-    	options.error(error_image);
-    	options.priority(Priority.HIGH);
+    private void setupGlideOptions() {
+       	options = new RequestOptions();
+       	
+       	if (isShapeCircle) {
+       		if (Defaults.CIRCLE_RADIUS > 0) {
+       			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
+       			
+       		} else { 
+       			options.circleCrop();
+       		}
+       	} 
+       	
+       	options.override(Defaults.IMAGE_HEIGHT, Defaults.IMAGE_HEIGHT);
+       	options.placeholder(placeholder_image);
+       	options.priority(Priority.HIGH);
     }
     
     
@@ -197,7 +181,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         PhotoHolder(View v) {
             super(v);
             
-            layout = (RelativeLayout) v.findViewById(image_viewer_container);
+            layout = (RelativeLayout) v.findViewById(image_view_container);
             imView = (ImageView) v.findViewById(image_id);
             title = (TextView) v.findViewById(title_id);
             
@@ -206,44 +190,68 @@ public class ImageViewerActivity extends AppCompatActivity {
             if (isShapeCircle) {
             	int pad = Defaults.CIRCLE_PADDING;
             	imView.setPadding(pad, pad, pad, pad);
-//            	layout.removeView(title);
             }
         }
 
-        private void setImageAndTitle(String imageTitle, String imagePath) {
-        	this.title.setText(imageTitle);
+        private void setImage(String imagePath) {
+        	imagePath = imagePath.trim();
         	
-        	try {
-        		Glide  
-                .with(getApplicationContext())
-                .load(new File(imagePath))
-                .apply(options)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imView);
+        	if (!imagePath.isEmpty()) {
+        		if (imagePath.startsWith("http") || imagePath.startsWith("www")) {
+        			try {
+        				Glide  
+                        .with(getApplicationContext())
+                        .load(imagePath)
+                        .apply(options)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(imView);
+        			} catch(Exception exc) {}
+        			
+        		} else {
+        			try {
+        				Glide  
+                        .with(getApplicationContext())
+                        .load(new File(imagePath))
+                        .apply(options)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(imView);
+        			} catch(Exception exc) {}
+        		}
+        	}
+        }
+        
+        private void setTitle(String title, String titleColor, String titleBg) {
+        	if (title.trim().isEmpty()) {
+        		this.layout.removeView(this.title);
         		
-        	} catch(Exception exc) {}
+        	} else {
+        		this.title.setTextColor(TiConvert.toColor(titleColor));
+        		this.title.setBackgroundColor(TiConvert.toColor(titleBg));
+        		this.title.setText(title);
+        	}
         }
     }
 
 
     private class PhotoAdapter extends RecyclerView.Adapter<PhotoHolder> {
-        private ArrayList<ImageAdapaterArray> allImagesArray;
+        private ArrayList<ImageViewerInfo> allImagesArray;
 
-        public PhotoAdapter(ArrayList<ImageAdapaterArray> imagePathArray) {
-            allImagesArray = imagePathArray;
+        public PhotoAdapter(ArrayList<ImageViewerInfo> imagesArray) {
+            allImagesArray = imagesArray;
         }
 
         @Override
         public PhotoHolder onCreateViewHolder(ViewGroup v, int type) {
             LayoutInflater inflater = LayoutInflater.from(TiApplication.getAppRootOrCurrentActivity());
-            View view = inflater.inflate(image_viewer_layout, v, false);
+            View view = inflater.inflate(image_view_layout, v, false);
             return new PhotoHolder(view);
         }
 
         @Override
         public void onBindViewHolder(PhotoHolder ph, int position) {
-//            ph.setImageAndTitle(allImagesArray.get(position).imagePath);
-
+        	ImageViewerInfo info = allImagesArray.get(position); 
+            ph.setImage(info.getImagePath());
+            ph.setTitle(info.getImageTitle(), info.getImageTitleColor(), info.getImageTitleBackgroundColor());
         }
 
         @Override
@@ -278,94 +286,15 @@ public class ImageViewerActivity extends AppCompatActivity {
             outRect.bottom = 0;
         }
     }
-    
 
-    private ArrayList<ImageAdapaterArray> setPhotosList() {
-        ArrayList<ImageAdapaterArray> galleryList = new ArrayList<ImageAdapaterArray>();
-
-        
-        return galleryList;
-    }
-    
-    
-    private void drawBackground(View v, int color, boolean isCircle) {
-    	if (isCircle) {
-            GradientDrawable gd = new GradientDrawable();
-            gd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-            gd.setColors(new int[]{color, Color.TRANSPARENT });
-            gd.setGradientRadius((Defaults.IMAGE_HEIGHT - Defaults.CIRCLE_PADDING)/2);
-            v.setBackground(gd);
-            
-        } else {
-            ShapeDrawable oval = new ShapeDrawable (new OvalShape());
-            oval.getPaint().setColor(color);
-            v.setBackground(oval);
-        }
-    }
-    	
-    
-    private void processImages(String path) {
-    	ArrayList<CharSequence> imagePaths = new ArrayList<CharSequence>();
-    	
-//    	if (isMultipleSelection) {
-//    		if (0 == totalSelectedImages) {
-//                Toast.makeText(getApplicationContext(), "No pictures selected.", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            final int totalCount = adapter.size();
-//            int totalImages = totalSelectedImages;
-//            int i = 0;
-//
-//            while((totalImages > 0) && (i < totalCount)) {
-//                if (adapter.get(i).selectionState) {
-//                    imagePaths.add(adapter.get(i).imagePath);
-//                    --totalImages;
-//                }
-//
-//                ++i;
-//            }
-//            
-//    	} else {
-//    		imagePaths.add(path);
-//    	}
-    	
-    	Intent intent = new Intent();
-        intent.putExtra(Defaults.Params.IMAGES, imagePaths);
-        intent.putExtra(TiC.PROPERTY_SUCCESS, true);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-    
     
     @Override
     public void onBackPressed() {
     	mRecyclerView.stopScroll();
-    	
-//        if (totalSelectedImages > 0) {      // if images are selected, then unselect them on back-press
-//            int i = 0;
-//            final int totalCount = adapter.size();
-//
-//            while((totalSelectedImages > 0) && (i < totalCount)) {
-//                if (adapter.get(i).selectionState) {
-//                    adapter.get(i).selectionState = false;  // set selected state to false
-//                    adapterSet.notifyItemChanged(i);        // notfiy that this position data has been changed & then reflect its UI
-//                    --totalSelectedImages;                  // decrease the selected image count by 1
-//                }
-//
-//                ++i;
-//            }
-//
-//            setTotalCount();
-//
-//        } else {
-//            setResult(RESULT_CANCELED);
-//            super.onBackPressed();
-//        }
+    	super.onBackPressed();
     }
-   
-}
 
+}
 
 
 

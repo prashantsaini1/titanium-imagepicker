@@ -4,6 +4,7 @@
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/src/in/prashant/imagepicker/ImageAdapaterArray.java"
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/src/in/prashant/imagepicker/ImagePickerActivity.java"
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/src/in/prashant/imagepicker/ImageViewerActivity.java"
+"/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/src/in/prashant/imagepicker/ImageViewerInfo.java"
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/src/in/prashant/imagepicker/ImagepickerModule.java"
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/build/generated/java/in/prashant/imagepicker/ImagepickerBootstrap.java"
 "/Users/prashant/Projects/Appcelerator_Studio_Workspace/imagepicker/android/build/generated/r/android/support/compat/R.java"

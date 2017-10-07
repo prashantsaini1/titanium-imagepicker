@@ -25,8 +25,8 @@ public class Defaults {
 	public static String MAX_IMAGE_MSG;
 
 	public static String IMAGE_PATH;
-	public static String IMAGE_TITLE;
-	public static String IMAGE_TITLE_COLOR;
+	public static final String IMAGE_TITLE_COLOR = "#fff";
+	public static final String IMAGE_TITLE_BACKGROUND_COLOR = "#80000000";
 	
 	public static int GRID_SIZE;
 	public static int IMAGE_HEIGHT;
@@ -56,22 +56,26 @@ public class Defaults {
 		static final String CIRCLE_RADIUS = "circleRadius";
 		static final String CIRCLE_PADDING = "circlePadding";
 		
-		static final String IMAGE_PATH = "imagePath";
+		
+		// image viewer parameters for each image
+		static final String IMAGE_PATH = "image";
 		static final String IMAGE_TITLE = "imageTitle";
-		static final String IMAGE_TITLE_COLOR = "imageTitleColor";
+		static final String IMAGE_TITLE_COLOR = "titleColor";
+		static final String IMAGE_TITLE_BACKGROUND_COLOR = "titleBackgroundColor";
+		static final String IMAGES = "images";
+		
 		
 		static final String CALLBACK = "callback";
-		static final String IMAGES = "images";
 	}	
 	
 
-	public static void resetValues() {
+	public static void resetValues(boolean openGallery) {
 		Defaults.STATUS_BAR_COLOR = "";		
 		Defaults.BAR_COLOR = "";		
 		Defaults.BACKGROUND_COLOR = "#f8f8f8";
 		Defaults.COVER_VIEW_COLOR = "#99000000";
 		Defaults.CHECKMARK_COLOR = "#ff8f00";		
-		Defaults.TITLE = "Select Pictures";
+		Defaults.TITLE = openGallery ? "Select Pictures" : "Pictures";
 		Defaults.DONE_BTN_TITLE = "Done";
 		Defaults.GRID_SIZE = 3;
 		Defaults.IMAGE_HEIGHT = 0;
@@ -82,10 +86,6 @@ public class Defaults {
 		Defaults.SHAPE = Defaults.SHAPE_SQUARE;
 		Defaults.CIRCLE_RADIUS = 0;
 		Defaults.CIRCLE_PADDING = 5;
-		
-		Defaults.IMAGE_PATH = "";
-		Defaults.IMAGE_TITLE = "";
-		Defaults.IMAGE_TITLE_COLOR = "#fff";
 	}
 	
 	
@@ -98,7 +98,6 @@ public class Defaults {
 			Defaults.BACKGROUND_COLOR = "" + bundle.getString(Params.BACKGROUND_COLOR);
 			Defaults.COVER_VIEW_COLOR = "" + bundle.getString(Params.COVER_VIEW_COLOR);
 			Defaults.CHECKMARK_COLOR = "" + bundle.getString(Params.CHECKMARK_COLOR);
-			Defaults.IMAGE_TITLE_COLOR = "" + bundle.getString(Params.IMAGE_TITLE_COLOR);
 			
 			Defaults.TITLE = "" + bundle.getString(Params.TITLE);
 			Defaults.DONE_BTN_TITLE = "" + bundle.getString(Params.DONE_BTN_TITLE);
@@ -144,7 +143,6 @@ public class Defaults {
 		Defaults.BACKGROUND_COLOR = checkTransparentColors(Defaults.BACKGROUND_COLOR);
 		Defaults.COVER_VIEW_COLOR = checkTransparentColors(Defaults.COVER_VIEW_COLOR);
 		Defaults.CHECKMARK_COLOR = checkTransparentColors(Defaults.CHECKMARK_COLOR);
-		Defaults.IMAGE_TITLE_COLOR = checkTransparentColors(Defaults.IMAGE_TITLE_COLOR);
 	}
 	
 	private static String checkTransparentColors(Object key) {

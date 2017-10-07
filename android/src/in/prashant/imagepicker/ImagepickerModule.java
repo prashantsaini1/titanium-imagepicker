@@ -8,6 +8,9 @@
  */
 package in.prashant.imagepicker;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
@@ -47,8 +50,8 @@ public class ImagepickerModule extends KrollModule
 		
 	}
 	
-	private Intent prepareExtrasForIntent(Intent intent, KrollDict options) {
-		Defaults.resetValues();
+	private Intent prepareExtrasForIntent(Intent intent, KrollDict options, boolean openGallery) {
+		Defaults.resetValues(openGallery);
 		
 		checkAndSetParameters(1, Defaults.Params.STATUS_BAR_COLOR, Defaults.STATUS_BAR_COLOR, options, intent);
 		checkAndSetParameters(1, Defaults.Params.BAR_COLOR, Defaults.BAR_COLOR, options, intent);
@@ -122,10 +125,54 @@ public class ImagepickerModule extends KrollModule
 		Intent intent = new Intent(activity, ImagePickerActivity.class);
 		
 		if (isOption) {
-			((TiActivitySupport) activity).launchActivityForResult(prepareExtrasForIntent(intent, options), Defaults.REQUEST_CODE, handler);
+			((TiActivitySupport) activity).launchActivityForResult(prepareExtrasForIntent(intent, options, true), Defaults.REQUEST_CODE, handler);
 			
 		} else {
 			activity.startActivity(intent);
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Kroll.method
+	public void createCustomGallery(KrollDict options) {
+		if ( (options != null) && options.containsKeyAndNotNull(Defaults.Params.IMAGES) ) {
+			Object[] imageArray = (Object []) options.get(Defaults.Params.IMAGES);
+			int size = imageArray.length;
+			
+			if (size != 0) { 
+				ArrayList<ImageViewerInfo> imagesInfo = new ArrayList<ImageViewerInfo>();
+				
+				for (int i=0; i<size; i++) {
+					Object o = imageArray[i];
+					KrollDict info = new KrollDict((HashMap<String, Object>) o);
+					
+					if ( (info != null) && info.containsKeyAndNotNull(Defaults.Params.IMAGE_PATH) ) {
+						String path = info.getString(Defaults.Params.IMAGE_PATH);
+						String title = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE) ? info.getString(Defaults.Params.IMAGE_TITLE) : "";
+						String titleColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_COLOR) : Defaults.IMAGE_TITLE_COLOR;		
+						String titleBgColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) : Defaults.IMAGE_TITLE_BACKGROUND_COLOR;		
+						
+						imagesInfo.add(new ImageViewerInfo(path, title, titleColor, titleBgColor));
+					}
+				}
+				
+				if (imagesInfo.size() > 0) {
+					Activity activity = TiApplication.getAppCurrentActivity();
+					
+					Intent intent = new Intent(activity, ImageViewerActivity.class);
+					intent = prepareExtrasForIntent(intent, options, false);
+					intent.putParcelableArrayListExtra(Defaults.Params.IMAGES, imagesInfo);
+					
+					activity.startActivity(intent);
+				}
+				
+			} else {
+				Log.e(Defaults.LCAT, "No images passed.");
+			}
+			
+		} else {
+			Log.e(Defaults.LCAT, "No options passed.");
 		}
 	}
 	
