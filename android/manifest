@@ -11,4 +11,4 @@ name: imagepicker
 moduleid: in.prashant.imagepicker
 guid: 0e233245-8692-4e70-bcec-00f3f1bb9014
 platform: android
-minsdk: 7.0.0
+minsdk: 7.0.0.GA
