@@ -179,9 +179,12 @@ public class ImagepickerModule extends KrollModule
 	
 	@Kroll.method
 	public TiBlob getImage(String filePath) {
+		filePath = filePath.replaceFirst("file://", "");
+		
         if (null != filePath) {
             return TiBlob.blobFromImage( BitmapFactory.decodeFile(filePath) );
         }
+        
         Log.e(Defaults.LCAT, "File path missing");
         return null;
     }
@@ -189,12 +192,14 @@ public class ImagepickerModule extends KrollModule
 	
 	@Kroll.method
     public TiBlob resizeAsAspect(String filePath, int reqWidth, int reqHeight) {
+		filePath = filePath.replaceFirst("file://", "");
         return Blobby.rescale(filePath, reqWidth, reqHeight, true);
     }
 
 	
 	@Kroll.method
     public TiBlob resizeAsSame(String filePath, int reqWidth, int reqHeight) {
+		filePath = filePath.replaceFirst("file://", "");
         return Blobby.rescale(filePath, reqWidth, reqHeight, false);
     }
 }
