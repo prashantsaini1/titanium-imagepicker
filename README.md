@@ -13,7 +13,7 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 
 
 ## Requirements & Installation
-* Ti SDK >= 6.0.0.GA
+* Ti SDK >= 7.0.0.GA
 * [Download latest module version from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/android/dist/)
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
@@ -104,7 +104,7 @@ module.createCustomGallery({
 ```
 | 2 Column UI   |   3 Column UI   |
 |:-------------------------:|:-------------------------:|
-|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_gallery2.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_gallery3.png)  |
+|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote_2.png)  |
 
 </br>
 

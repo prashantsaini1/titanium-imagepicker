@@ -463,7 +463,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
             while((totalImages > 0) && (i < totalCount)) {
                 if (adapter.get(i).selectionState) {
-                    imagePaths.add(adapter.get(i).imagePath);
+                    imagePaths.add("file://" + adapter.get(i).imagePath);
                     --totalImages;
                 }
 
