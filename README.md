@@ -104,7 +104,7 @@ module.createCustomGallery({
 ```
 | 2 Column UI   |   3 Column UI   |
 |:-------------------------:|:-------------------------:|
-|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/local_remote_2.png)  |
+|  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_gallery2.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_gallery3.png)  |
 
 </br>
 
