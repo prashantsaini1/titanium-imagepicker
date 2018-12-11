@@ -29,11 +29,12 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 
 | Argument              | Description           | Default Value              |
 | --------------------- |:--------------------- | :------------------------- |
-|  String **colorPrimaryDark**     | Status bar background color | Same as app theme |
-|  String **colorPrimary**      |  Actionbar background color   | Same as app theme |
-|  String **backgroundColor**   | Background color behind grid-images    | white-tint |
-|  String **coverViewColor**    |  Background color of cover-view behind checkmar icon   | semi-transparent black |
-|     String **checkMarkColor** | Checkmark-icon color    | orange-tint |
+| String **colorPrimaryDark**     | Status bar background color | Same as app theme |
+| String **colorPrimary**       |  Actionbar background color   | Same as app theme |
+| String **theme**              |  Custom theme       | Same as app theme |
+| String **backgroundColor**    | Background color behind grid-images    | white-tint |
+| String **coverViewColor**     |  Background color of cover-view behind checkmar icon   | semi-transparent black |
+| String **checkMarkColor**     | Checkmark-icon color    | orange-tint |
 | String **title**              |  Title of the gallery window   | Select Pictures |
 | String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE |
 | int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) |
@@ -53,6 +54,7 @@ module.openGallery({
   title : "Custom Title",
   colorPrimaryDark : '#de3b30',
   colorPrimary : '#de3b30',
+  theme : 'CustomeTheme',       // mandatory to avoid crash in case if any non ActionBar theme is applied on overall app
   columnCount : 4,
   coverViewColor : '#aaffffff',
   checkMarkColor : '#000000',
@@ -142,6 +144,11 @@ module.createCustomGallery({
 <hr/>
 
 ### Changelog
+
+**v2.1.0**
+* Added `theme` property support to define any custom theme.
+* Fixed crash if any non ActionBar theme is applied on overall app.
+* Added new Glide library v4.7.0.
 
 **v1.3.0**
 * Added method to create a custom gallery which can load local images or remote images or both at same time.

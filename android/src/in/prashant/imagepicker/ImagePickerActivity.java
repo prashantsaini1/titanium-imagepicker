@@ -54,12 +54,12 @@ import com.bumptech.glide.request.RequestOptions;
 public class ImagePickerActivity extends AppCompatActivity {
 	private static final String TAG = "ImagePicker";
 	private static final int DONE_MENU = 111;
-    
+
 	private RequestOptions options;
 	private RecyclerView mRecyclerView;
     private ArrayList<ImageAdapaterArray> adapter = new ArrayList<ImageAdapaterArray>();
     private PhotoAdapter adapterSet;
-    
+
     private int totalSelectedImages = 0;
     private int container = 0;
     private int image_container_id = 0;
@@ -71,44 +71,55 @@ public class ImagePickerActivity extends AppCompatActivity {
     private int error_image = 0;
     private boolean isMultipleSelection = true;
     private boolean isShapeCircle = false;
-   
+
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
+
         Defaults.setupInitialValues(getApplicationContext(), getIntent());
+
+        if (!Defaults.ACTIVITY_THEME.isEmpty()) {
+        		setTheme(Utils.getR("style." + Defaults.ACTIVITY_THEME));
+        }
+
         setupIds();
         setContentView(main_layout_id);
-        
-        isMultipleSelection = (1 != Defaults.MAX_IMAGE_SELECTION); 
+
+        isMultipleSelection = (1 != Defaults.MAX_IMAGE_SELECTION);
         isShapeCircle = Defaults.SHAPE_CIRCLE == Defaults.SHAPE;
 
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            
+
             if (!Defaults.STATUS_BAR_COLOR.isEmpty()) {
             	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
             }
-            
+
             window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR));
         }
-        
+
         ActionBar actionBar = getSupportActionBar();
-        
-        if (!Defaults.BAR_COLOR.isEmpty()) {
-        	actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+
+        if (actionBar != null) {
+        		if (!Defaults.BAR_COLOR.isEmpty()) {
+        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+            }
+
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(Defaults.TITLE);
+
+        } else {
+        		Log.e(TAG, Defaults.ACTION_BAR_ERROR_MSG);
         }
-        	
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(Defaults.TITLE);
-        
+
+
         mRecyclerView = new RecyclerView(TiApplication.getInstance());
         mRecyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRecyclerView.setLayoutManager(new GridLayoutManager(ImagePickerActivity.this, Defaults.GRID_SIZE));
@@ -116,58 +127,58 @@ public class ImagePickerActivity extends AppCompatActivity {
         FrameLayout frame_container = (FrameLayout) findViewById(container);
         frame_container.addView(mRecyclerView);
         frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
-        
+
         adapterSet = new PhotoAdapter(adapter);
         mRecyclerView.setAdapter(adapterSet);
-        
+
         if ( (1 == Defaults.SHOW_DIVIDER) && (!isShapeCircle) ) {
         	mRecyclerView.addItemDecoration(new DividerDecoration());
         }
-        
+
         setupGlideOptions(); // set glide-options to apply on image
-        
+
         // Get gallery photos in a new UI thread like AsyncTask to update UI changes properly
         new FetchImages().execute();
     }
-    
-    
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	if (isMultipleSelection) {
     		MenuItem menuitem = menu.add(Menu.NONE, DONE_MENU, Menu.NONE, Defaults.DONE_BTN_TITLE);
             menuitem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	}
-        
+
         return true;
     }
-    
-    
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
-            
+
             case DONE_MENU:
             	processImages("");
             	break;
-            
+
             default:
             	break;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    
+
 
     @Override
     protected void onPause() {
         mRecyclerView.stopScroll();
         super.onPause();
     }
-    
-    
+
+
     private void setupIds() {
     	try {
     		container = TiRHelper.getResource("id.container");
@@ -178,59 +189,63 @@ public class ImagePickerActivity extends AppCompatActivity {
     		image_cover = TiRHelper.getResource("id.coverView");
     		image_checkbox = TiRHelper.getResource("id.checkbox");
     		error_image = TiRHelper.getResource("drawable.no_image");
-    		
+
     	} catch (ResourceNotFoundException e) {
     		Log.i(TAG, "XML resources could not be found!!!");
     	}
     }
-    
-    
+
+
     private void setupMaxCountSize() {
     	int maxCount = Defaults.MAX_IMAGE_SELECTION;
-    	
+
     	// set max-image-select count to total no. of pics if passed count is <= 0 or
     	// >= total no. of pics
-    	if ( (maxCount <= 0) || (maxCount >= adapter.size()) ) {		 
+    	if ( (maxCount <= 0) || (maxCount >= adapter.size()) ) {
     		Defaults.MAX_IMAGE_SELECTION = adapter.size();
     	}
     }
-    
+
 
     private void setTotalCount() {
-    	// show subtitle when there is a multiple selection of images
-    	if (isMultipleSelection) {
-    		ActionBar actionBar = getSupportActionBar();
-            int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
-            actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
-    	}
+	    	// show subtitle when there is a multiple selection of images
+	    	if (isMultipleSelection) {
+	    		ActionBar actionBar = getSupportActionBar();
+	    		if (actionBar != null) {
+	    			int maxSelectionLimit = Defaults.MAX_IMAGE_SELECTION > 0 ? Defaults.MAX_IMAGE_SELECTION : adapter.size();
+	                actionBar.setSubtitle(totalSelectedImages + " / " + maxSelectionLimit);
+	    		} else {
+	    			Log.e(TAG, Defaults.ACTION_BAR_ERROR_MSG);
+	    		}
+	    	}
     }
-    
-    
+
+
     @SuppressWarnings("unchecked")
 	private void setupGlideOptions() {
     	options = new RequestOptions();
     	int size;
-    	
+
     	if (isShapeCircle) {
     		if (Defaults.CIRCLE_RADIUS > 0) {
     			size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
     			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
-    			
-    		} else { 
+
+    		} else {
     			size = Defaults.IMAGE_HEIGHT;
     			options.circleCrop();
     		}
-    		
+
     	} else {
-    		size = (int) (0.65 * Defaults.IMAGE_HEIGHT); 
+    		size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
     	}
-    	
+
     	options.override(size, size);
     	options.error(error_image);
     	options.priority(Priority.HIGH);
     }
-    
-    
+
+
     private class FetchImages extends AsyncTask<Void, Void, ArrayList<ImageAdapaterArray>> {
         @Override
         protected ArrayList<ImageAdapaterArray> doInBackground(Void... params) {
@@ -241,22 +256,22 @@ public class ImagePickerActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<ImageAdapaterArray> items) {
         	if (items.size() > 0) {
         		totalSelectedImages = 0;
-            	
+
         		adapter.clear();
             	adapter.addAll(items);
-            	
+
             	setupMaxCountSize();
             	setTotalCount();
-            	
+
                 adapterSet.notifyDataSetChanged();
-                
+
         	} else {
         		Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "No pictures available in your gallery.", Toast.LENGTH_SHORT).show();
         		onBackPressed();
         	}
         }
     }
-   
+
 
     private class PhotoHolder extends RecyclerView.ViewHolder {
         int position = -1;
@@ -267,26 +282,26 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         PhotoHolder(View v) {
             super(v);
-            
+
             layout = (RelativeLayout) v.findViewById(image_container_id);
             cover_view = (View) v.findViewById(image_cover);
             imView = (ImageView) v.findViewById(image_id);
-            
+
             layout.getLayoutParams().height = Defaults.IMAGE_HEIGHT;
-            
+
             checkMark = (ImageView) v.findViewById(image_checkbox);
             drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR), false);
-            
+
             if (isShapeCircle) {
             	int pad = Defaults.CIRCLE_PADDING;
             	imView.setPadding(pad, pad, pad, pad);
             	cover_view.setPadding(pad, pad, pad, pad);
-            	
+
             	cover_view.getLayoutParams().height = Defaults.IMAGE_HEIGHT - 2 * pad;
             	cover_view.getLayoutParams().width = Defaults.IMAGE_HEIGHT - 2 * pad;
-                
+
             	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR), true);
-            	
+
             } else {
             	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
             }
@@ -300,20 +315,20 @@ public class ImagePickerActivity extends AppCompatActivity {
                         	--totalSelectedImages;
                         	setSelectionState(false, position);
                         	adapter.get(position).selectionState = false;
-                        	
+
                         } else {
                         	if (totalSelectedImages < Defaults.MAX_IMAGE_SELECTION) {
     	                    	++totalSelectedImages;
     	                    	setSelectionState(true, position);
     	                    	adapter.get(position).selectionState = true;
-    	                    	
+
                         	} else {
                         		Toast.makeText(getApplicationContext(), Defaults.MAX_IMAGE_MSG, Toast.LENGTH_SHORT).show();
                         	}
                         }
 
                         setTotalCount();
-                        
+
                     } else {
                     	processImages(adapter.get(position).imagePath);
                     }
@@ -336,13 +351,13 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         private void setImagePath(String path) {
         	try {
-        		Glide  
+        		Glide
                 .with(getApplicationContext())
                 .load(new File(path))
                 .apply(options)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imView);
-        		
+
         	} catch(Exception exc) {}
         }
     }
@@ -374,7 +389,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             return allImagesArray.size();
         }
     }
-    
+
 
     private class DividerDecoration extends RecyclerView.ItemDecoration {
         @Override
@@ -401,7 +416,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             outRect.bottom = 0;
         }
     }
-    
+
 
     private ArrayList<ImageAdapaterArray> getGalleryPhotos() {
         ArrayList<ImageAdapaterArray> galleryList = new ArrayList<ImageAdapaterArray>();
@@ -430,8 +445,8 @@ public class ImagePickerActivity extends AppCompatActivity {
         Collections.reverse(galleryList);
         return galleryList;
     }
-    
-    
+
+
     private void drawBackground(View v, int color, boolean isCircle) {
     	if (isCircle) {
             GradientDrawable gd = new GradientDrawable();
@@ -439,18 +454,18 @@ public class ImagePickerActivity extends AppCompatActivity {
             gd.setColors(new int[]{color, Color.TRANSPARENT });
             gd.setGradientRadius((Defaults.IMAGE_HEIGHT - Defaults.CIRCLE_PADDING)/2);
             v.setBackground(gd);
-            
+
         } else {
             ShapeDrawable oval = new ShapeDrawable (new OvalShape());
             oval.getPaint().setColor(color);
             v.setBackground(oval);
         }
     }
-    	
-    
+
+
     private void processImages(String path) {
     	ArrayList<CharSequence> imagePaths = new ArrayList<CharSequence>();
-    	
+
     	if (isMultipleSelection) {
     		if (0 == totalSelectedImages) {
                 Toast.makeText(getApplicationContext(), "No pictures selected.", Toast.LENGTH_SHORT).show();
@@ -469,23 +484,23 @@ public class ImagePickerActivity extends AppCompatActivity {
 
                 ++i;
             }
-            
+
     	} else {
     		imagePaths.add(path);
     	}
-    	
+
     	Intent intent = new Intent();
         intent.putExtra(Defaults.Params.IMAGES, imagePaths);
         intent.putExtra(TiC.PROPERTY_SUCCESS, true);
         setResult(RESULT_OK, intent);
         finish();
     }
-    
-    
+
+
     @Override
     public void onBackPressed() {
-    	mRecyclerView.stopScroll();
-    	
+    		mRecyclerView.stopScroll();
+
         if (totalSelectedImages > 0) {      // if images are selected, then unselect them on back-press
             int i = 0;
             final int totalCount = adapter.size();
@@ -507,12 +522,5 @@ public class ImagePickerActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-   
+
 }
-
-
-
-
-
-
-

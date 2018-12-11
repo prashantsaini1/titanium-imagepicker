@@ -32,27 +32,27 @@ import android.widget.Toast;
 
 @Kroll.module(name="Imagepicker", id="in.prashant.imagepicker")
 public class ImagepickerModule extends KrollModule
-{	
+{
 	@Kroll.constant
 	public static final int SHAPE_CIRCLE = Defaults.SHAPE_CIRCLE;
-	
+
 	@Kroll.constant
 	public static final int SHAPE_SQUARE = Defaults.SHAPE_SQUARE;
-	
+
 
 	public ImagepickerModule() {
 		super();
 	}
 
-	
+
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-		
+
 	}
-	
+
 	private Intent prepareExtrasForIntent(Intent intent, KrollDict options, boolean openGallery) {
 		Defaults.resetValues(openGallery);
-		
+
 		checkAndSetParameters(1, Defaults.Params.STATUS_BAR_COLOR, Defaults.STATUS_BAR_COLOR, options, intent);
 		checkAndSetParameters(1, Defaults.Params.BAR_COLOR, Defaults.BAR_COLOR, options, intent);
 		checkAndSetParameters(1, Defaults.Params.BACKGROUND_COLOR, Defaults.BACKGROUND_COLOR, options, intent);
@@ -61,6 +61,7 @@ public class ImagepickerModule extends KrollModule
 		checkAndSetParameters(1, Defaults.Params.TITLE, Defaults.TITLE, options, intent);
 		checkAndSetParameters(1, Defaults.Params.DONE_BTN_TITLE, Defaults.DONE_BTN_TITLE, options, intent);
 		checkAndSetParameters(1, Defaults.Params.MAX_IMAGE_MSG, Defaults.MAX_IMAGE_MSG, options, intent);
+		checkAndSetParameters(1, Defaults.Params.ACTIVITY_THEME, Defaults.ACTIVITY_THEME, options, intent);
 		checkAndSetParameters(2, Defaults.Params.GRID_SIZE, Defaults.GRID_SIZE, options, intent);
 		checkAndSetParameters(2, Defaults.Params.IMAGE_HEIGHT, Defaults.IMAGE_HEIGHT, options, intent);
 		checkAndSetParameters(2, Defaults.Params.SHOW_DIVIDER, Defaults.SHOW_DIVIDER, options, intent);
@@ -69,36 +70,36 @@ public class ImagepickerModule extends KrollModule
 		checkAndSetParameters(2, Defaults.Params.SHAPE, Defaults.SHAPE, options, intent);
 		checkAndSetParameters(2, Defaults.Params.CIRCLE_RADIUS, Defaults.CIRCLE_RADIUS, options, intent);
 		checkAndSetParameters(2, Defaults.Params.CIRCLE_PADDING, Defaults.CIRCLE_PADDING, options, intent);
-	    
+
 		return intent;
 	}
-	
+
 	// set extras received as dictionary from Titanium app, if not, then put their default value
 	// (String = Type 1) & (Integer = Type 2)
 	private void checkAndSetParameters(int type, String key, Object defaultValue, KrollDict options, Intent intent) {
 		if (1 == type) {
 			intent.putExtra(key, (String) (options.containsKeyAndNotNull(key) ? options.get(key) : defaultValue));
-			
+
 		} else if (2 == type) {
 			intent.putExtra(key, (Integer) (options.containsKeyAndNotNull(key) ? options.get(key) : defaultValue));
 		}
 	}
-	
+
 	private boolean hasStoragePermissions() {
 		if (Build.VERSION.SDK_INT < 23) {
 			return true;
 		}
-		
+
 		Context context = TiApplication.getInstance().getApplicationContext();
-		
+
 		if (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 			return true;
 		}
-		
+
 		return false;
     }
-	
-	
+
+
 	@Kroll.method
 	public void openGallery(@Kroll.argument(optional=true) KrollDict options) {
 		if (!hasStoragePermissions()) {
@@ -106,105 +107,100 @@ public class ImagepickerModule extends KrollModule
 			Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "Storage permissions are denied.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		boolean isOption = null != options;
-		
+
 		KrollFunction callback = null;
-		
+
 		if (isOption) {
 			if (options.containsKeyAndNotNull(Defaults.Params.CALLBACK)) {
 				if (options.get(Defaults.Params.CALLBACK) instanceof KrollFunction) {
 					callback = (KrollFunction) options.get(Defaults.Params.CALLBACK);
-				} 
+				}
 			}
 		}
-		
+
 		GalleryResultHandler handler = new GalleryResultHandler(callback, getKrollObject());
-		
+
 		Activity activity = TiApplication.getAppCurrentActivity();
 		Intent intent = new Intent(activity, ImagePickerActivity.class);
-		
+
 		if (isOption) {
 			((TiActivitySupport) activity).launchActivityForResult(prepareExtrasForIntent(intent, options, true), Defaults.REQUEST_CODE, handler);
-			
+
 		} else {
 			activity.startActivity(intent);
 		}
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	@Kroll.method
 	public void createCustomGallery(KrollDict options) {
 		if ( (options != null) && options.containsKeyAndNotNull(Defaults.Params.IMAGES) ) {
 			Object[] imageArray = (Object []) options.get(Defaults.Params.IMAGES);
 			int size = imageArray.length;
-			
-			if (size != 0) { 
+
+			if (size != 0) {
 				ArrayList<ImageViewerInfo> imagesInfo = new ArrayList<ImageViewerInfo>();
-				
+
 				for (int i=0; i<size; i++) {
 					Object o = imageArray[i];
 					KrollDict info = new KrollDict((HashMap<String, Object>) o);
-					
+
 					if ( (info != null) && info.containsKeyAndNotNull(Defaults.Params.IMAGE_PATH) ) {
 						String path = info.getString(Defaults.Params.IMAGE_PATH);
 						String title = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE) ? info.getString(Defaults.Params.IMAGE_TITLE) : "";
-						String titleColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_COLOR) : Defaults.IMAGE_TITLE_COLOR;		
-						String titleBgColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) : Defaults.IMAGE_TITLE_BACKGROUND_COLOR;		
-						
+						String titleColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_COLOR) : Defaults.IMAGE_TITLE_COLOR;
+						String titleBgColor = info.containsKeyAndNotNull(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) ? info.getString(Defaults.Params.IMAGE_TITLE_BACKGROUND_COLOR) : Defaults.IMAGE_TITLE_BACKGROUND_COLOR;
+
 						imagesInfo.add(new ImageViewerInfo(path, title, titleColor, titleBgColor));
 					}
 				}
-				
+
 				if (imagesInfo.size() > 0) {
 					Activity activity = TiApplication.getAppCurrentActivity();
-					
+
 					Intent intent = new Intent(activity, ImageViewerActivity.class);
 					intent = prepareExtrasForIntent(intent, options, false);
 					intent.putParcelableArrayListExtra(Defaults.Params.IMAGES, imagesInfo);
-					
+
 					activity.startActivity(intent);
 				}
-				
+
 			} else {
 				Log.e(Defaults.LCAT, "No images passed.");
 			}
-			
+
 		} else {
 			Log.e(Defaults.LCAT, "No options passed.");
 		}
 	}
-	
-	
+
+
 	@Kroll.method
 	public TiBlob getImage(String filePath) {
 		filePath = filePath.replaceFirst("file://", "");
-		
+
         if (null != filePath) {
             return TiBlob.blobFromImage( BitmapFactory.decodeFile(filePath) );
         }
-        
+
         Log.e(Defaults.LCAT, "File path missing");
         return null;
     }
-	
-	
+
+
 	@Kroll.method
     public TiBlob resizeAsAspect(String filePath, int reqWidth, int reqHeight) {
 		filePath = filePath.replaceFirst("file://", "");
         return Blobby.rescale(filePath, reqWidth, reqHeight, true);
     }
 
-	
+
 	@Kroll.method
     public TiBlob resizeAsSame(String filePath, int reqWidth, int reqHeight) {
 		filePath = filePath.replaceFirst("file://", "");
         return Blobby.rescale(filePath, reqWidth, reqHeight, false);
     }
 }
-
-
-
-
-
