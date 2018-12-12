@@ -32,7 +32,7 @@ For iOS: Built using the Swift-based [https://github.com/hyperoslo/ImagePicker](
 * Takes following arguments in a single dictionary object. (All arguments are optional though)
 
 | Argument              | Description           | Default Value              | Platform |
-<!--| --------------------- | --------------------- | ------------------------- | ----- |
+| --------------------- | --------------------- | ------------------------- | ----- |
 | String **colorPrimaryDark**     | Status bar background color | Same as app theme | Android |
 | String **colorPrimary**       |  Actionbar background color   | Same as app theme | Android |
 | String **theme**              |  Custom theme       | Same as app theme | Android |
