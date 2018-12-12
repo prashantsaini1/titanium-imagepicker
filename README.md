@@ -13,6 +13,10 @@ For iOS: Built using the Swift-based [https://github.com/hyperoslo/ImagePicker](
 |:-------------------------:|:-------------------------:|:------------------------:|
 |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_circle.png)  |
 
+## Migrate from < 3.x
+
+In 3.0.0, this module achieved parity with iOS. During that move, the module ID changed to `ti.imagepicker`. 
+Please change the module-id in both your tiapp.xml and source code usage.
 
 ## Requirements & Installation
 * Ti SDK >= 7.0.0.GA
@@ -20,7 +24,7 @@ For iOS: Built using the Swift-based [https://github.com/hyperoslo/ImagePicker](
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
 ```
-<module platform="android">in.prashant.imagepicker</module>
+<module platform="android">ti.imagepicker</module>
 ```
 
 
