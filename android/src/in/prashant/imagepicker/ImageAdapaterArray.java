@@ -1,4 +1,4 @@
-package in.prashant.imagepicker;
+package ti.imagepicker;
 
 /**
  * Created by Prashant Saini on 17/09/17.

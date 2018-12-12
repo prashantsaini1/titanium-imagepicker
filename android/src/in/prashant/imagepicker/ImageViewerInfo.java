@@ -1,4 +1,4 @@
-package in.prashant.imagepicker;
+package ti.imagepicker;
 
 import android.os.Parcel;
 import android.os.Parcelable;

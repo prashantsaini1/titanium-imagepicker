@@ -1,5 +1,5 @@
 
-package in.prashant.imagepicker;
+package ti.imagepicker;
 
 import java.lang.reflect.Field;
 import org.appcelerator.titanium.util.TiRHelper;
