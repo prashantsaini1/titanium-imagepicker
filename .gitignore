@@ -6,3 +6,5 @@ bin/
 build
 android/build/
 .classpath
+ios/Carthage
+ios/ti.imagepicker-iphone-*.zip
