@@ -1,5 +1,7 @@
-# Titanium Android - Multi-Image picker module
-Meet the powerful Android multi-image picker module built by using RecyclerView & GridLayoutManager API, & the beautiful image loading [Glide Library](https://github.com/bumptech/glide).
+# Titanium - Multi-Image picker module
+Meet the powerful Android  /iOS multi-image picker module. 
+For Android: Built using RecyclerView & GridLayoutManager API, & the beautiful image loading [Glide Library](https://github.com/bumptech/glide).
+For iOS: Built using the Swift-based [https://github.com/hyperoslo/ImagePicker](ImagePicker Library). 
 
 * Efficient & blazing fast loading your entire gallery no matter there are 10k images or more.
 * Select multiple images with some useful image manipulation methods.
@@ -11,6 +13,10 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 |:-------------------------:|:-------------------------:|:------------------------:|
 |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/default.png)   |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom.png)  |  ![](https://github.com/prashantsaini1/titanium-android-imagepicker/blob/master/custom_circle.png)  |
 
+## Migrate from < 3.x
+
+In 3.0.0, this module achieved parity with iOS. During that move, the module ID changed to `ti.imagepicker`. 
+Please change the module-id in both your tiapp.xml and source code usage.
 
 ## Requirements & Installation
 * Ti SDK >= 7.0.0.GA
@@ -18,38 +24,40 @@ Meet the powerful Android multi-image picker module built by using RecyclerView 
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
 ```
-<module platform="android">in.prashant.imagepicker</module>
+<module platform="android">ti.imagepicker</module>
 ```
 
 
 # Methods
-1. **openGallery()**
+
+###  openGallery()
+
 * Opens the inbuilt gallery with a 3x3 default grid-view.
 * Takes following arguments in a single dictionary object. (All arguments are optional though)
 
-| Argument              | Description           | Default Value              |
-| --------------------- |:--------------------- | :------------------------- |
-| String **colorPrimaryDark**     | Status bar background color | Same as app theme |
-| String **colorPrimary**       |  Actionbar background color   | Same as app theme |
-| String **theme**              |  Custom theme       | Same as app theme |
-| String **backgroundColor**    | Background color behind grid-images    | white-tint |
-| String **coverViewColor**     |  Background color of cover-view behind checkmar icon   | semi-transparent black |
-| String **checkMarkColor**     | Checkmark-icon color    | orange-tint |
-| String **title**              |  Title of the gallery window   | Select Pictures |
-| String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE |
-| int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) |
-| int **imageHeight**    | ImageView height in dp    | same as width |
-| boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true |
-| int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp |
-| int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit |
-| String **maxImageMessage**     | Message to show when max limit is reached.     | - |
-| int **shape**     | Constant as Module.SHAPE_CIRCLE or  Module.SHAPE_SQUARE     | Module.SHAPE_SQUARE |
-| int **circleRadius**     | Radius of the circle if shape is Module.SHAPE_CIRCLE     | Complete circle |
-| int **circlePadding**     | Padding between circular images similar to divider-width     | 5 |
-| function **callback**    | Callback method to get results into. See below example for its usage    | none |
+| Argument              | Description           | Default Value              | Platform |
+| --------------------- | --------------------- | ------------------------- | ----- |
+| String **colorPrimaryDark**     | Status bar background color | Same as app theme | Android |
+| String **colorPrimary**       |  Actionbar background color   | Same as app theme | Android |
+| String **theme**              |  Custom theme       | Same as app theme | Android |
+| String **backgroundColor**    | Background color behind grid-images    | white-tint | Android |
+| String **coverViewColor**     |  Background color of cover-view behind checkmar icon   | semi-transparent black | Android |
+| String **checkMarkColor**     | Checkmark-icon color    | orange-tint | Android |
+| String **title**              |  Title of the gallery window   | Select Pictures | Android |
+| String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE | Android, iOS |
+| int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) | Android |
+| int **imageHeight**    | ImageView height in dp    | same as width | Android |
+| boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true | Android |
+| int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp | Android |
+| int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit | Android |
+| String **maxImageMessage**     | Message to show when max limit is reached.     | - | Android |
+| int **shape**     | Constant as Module.SHAPE_CIRCLE or  Module.SHAPE_SQUARE     | Module.SHAPE_SQUARE | Android |
+| int **circleRadius**     | Radius of the circle if shape is Module.SHAPE_CIRCLE     | Complete circle | Android |
+| int **circlePadding**     | Padding between circular images similar to divider-width     | 5 | Android |
+| function **callback**    | Callback method to get results into. See below example for its usage    | none | Android, iOS |
 
 ```javascript
-var module = require('in.prashant.imagepicker');
+var module = require('ti.imagepicker');
 module.openGallery({
   title : "Custom Title",
   colorPrimaryDark : '#de3b30',
@@ -71,7 +79,8 @@ module.openGallery({
 });
 ```
 
-2. **createCustomGallery(args)**:
+### createCustomGallery(args)
+##### Android-only!
 * Open a custom gallery with defined images. See following code on its usage.
 
 | Argument        | Description           | Optional  |
@@ -79,7 +88,7 @@ module.openGallery({
 | Dict args | Pass same options as above method `openGallery` with additional `images` array | no |
 
 ```javascript
-var module = require('in.prashant.imagepicker');
+var module = require('ti.imagepicker');
 module.createCustomGallery({
 	title : "Local + Remote Pictures",
 	columnCount : 2,
@@ -145,24 +154,30 @@ module.createCustomGallery({
 
 ### Changelog
 
-**v2.1.0**
+**iOS v1.0.0**
+* Added parity with Android using the `ti.imagepicker` namespace
+
+**Android v3.0.0**
+* Added parity with iOS using the `ti.imagepicker` namespace
+
+**Android v2.1.0**
 * Added `theme` property support to define any custom theme.
 * Fixed crash if any non ActionBar theme is applied on overall app.
 * Added new Glide library v4.7.0.
 
-**v1.3.0**
+**Android v1.3.0**
 * Added method to create a custom gallery which can load local images or remote images or both at same time.
 * Images can also have with a title with custom font color & backgroundColor.
 
 
-**v1.2.0**
+**Android v1.2.0**
 * Upgraded to Glide 4.1.1
 * Added circular shape option for image-views with circular radius & padding.
 * Added option to define message on max limit reach.
 * Added error image drawable when no image is found, can be replaced by your custom drawable file with same name as 'no_image.png'.
 
 
-**v1.1.0**
+**Android v1.1.0**
 * Maximum image selection count added. Can be also passed as 1 to select only 1 image instantly.
 * Color formats supported now: RGB, ARGB, RRGGBB, AARRGGBB, & color names
 
@@ -176,7 +191,7 @@ module.createCustomGallery({
 
 
 ## LICENSE
-    Copyright 2017 Prashant Saini
+    Copyright 2017-present Prashant Saini
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

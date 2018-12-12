@@ -6,7 +6,7 @@
  * Please see the LICENSE included with this distribution for details.
  *
  */
-package in.prashant.imagepicker;
+package ti.imagepicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 
 
-@Kroll.module(name="Imagepicker", id="in.prashant.imagepicker")
+@Kroll.module(name="Imagepicker", id="ti.imagepicker")
 public class ImagepickerModule extends KrollModule
 {
 	@Kroll.constant
