@@ -25,6 +25,7 @@ Please change the module-id in both your tiapp.xml and source code usage.
 
 ```
 <module platform="android">ti.imagepicker</module>
+<module platform="iphone">ti.imagepicker</module>
 ```
 
 
@@ -62,7 +63,7 @@ module.openGallery({
   title : "Custom Title",
   colorPrimaryDark : '#de3b30',
   colorPrimary : '#de3b30',
-  theme : 'CustomeTheme',       // mandatory to avoid crash in case if any non ActionBar theme is applied on overall app
+  theme : 'CustomeTheme',       // Pass any ActionBar enabled theme to avoid crash if any non ActionBar theme is applied on overall app, else auto uses the application theme
   columnCount : 4,
   coverViewColor : '#aaffffff',
   checkMarkColor : '#000000',
