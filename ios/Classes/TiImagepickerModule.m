@@ -46,6 +46,8 @@
   NSString *noCameraTitle = [TiUtils stringValue:args[@"noCameraTitle"]];
   NSString *noImagesTitle = [TiUtils stringValue:args[@"noImagesTitle"]];
   NSString *settingsTitle = [TiUtils stringValue:args[@"settingsTitle"]];
+  NSUInteger columnCount = [TiUtils intValue:args[@"columnCount"] def:3];
+  BOOL recordLocation = [TiUtils boolValue:args[@"recordLocation"] def:NO];
 
   _currentCallback = (KrollCallback *)args[@"callback"];
 
@@ -55,6 +57,7 @@
   imagePickerConfig.noCameraTitle = noCameraTitle;
   imagePickerConfig.noImagesTitle = noImagesTitle;
   imagePickerConfig.settingsTitle = settingsTitle;
+  imagePickerConfig.recordLocation = recordLocation;
 
   ImagePickerController *imagePicker = [[ImagePickerController alloc] initWithConfiguration:imagePickerConfig];
   
