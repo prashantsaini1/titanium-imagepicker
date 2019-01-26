@@ -2,27 +2,13 @@
 //  TiImagepickerModule.swift
 //  titanium-imagepicker
 //
-//  Created by Your Name
-//  Copyright (c) 2019 Your Company. All rights reserved.
+//  Created by Hans Knöchel
+//  Copyright (c) 2019 Hans Knöchel. All rights reserved.
 //
 
 import UIKit
 import TitaniumKit
 import YPImagePicker
-
-/**
- 
- Titanium Swift Module Requirements
- ---
- 
- 1. Use the @objc annotation to expose your class to Objective-C (used by the Titanium core)
- 2. Use the @objc annotation to expose your method to Objective-C as well.
- 3. Method arguments always have the "[Any]" type, specifying a various number of arguments.
- Unwrap them like you would do in Swift, e.g. "guard let arguments = arguments, let message = arguments.first"
- 4. You can use any public Titanium API like before, e.g. TiUtils. Remember the type safety of Swift, like Int vs Int32
- and NSString vs. String.
- 
- */
 
 @objc(TiImagepickerModule)
 class TiImagepickerModule: TiModule {
@@ -45,9 +31,7 @@ class TiImagepickerModule: TiModule {
   @objc(openGallery:)
   func openGallery(arguments: Array<Any>?) {
     guard let arguments = arguments, let options = arguments[0] as? [String: Any] else { return }
-
     guard let callback: KrollCallback = options["callback"] as? KrollCallback else { return }
-    var maxImageSelection = 99
 
     var config = YPImagePickerConfiguration()
 
@@ -56,31 +40,34 @@ class TiImagepickerModule: TiModule {
     config.startOnScreen = .library
     config.screens = [.library, .photo]
     config.shouldSaveNewPicturesToAlbum = false
-    
+
+    // General (optional) config
+    config.library.numberOfItemsInRow = options["columnCount"] as? Int ?? 3
+
     if options["tintColor"] != nil {
       config.colors.tintColor = TiUtils.colorValue(options["tintColor"])!.color
     }
-    
+
     if options["maxImageSelection"] != nil {
-      maxImageSelection = options["maxImageSelection"] as! Int
+      config.library.maxNumberOfItems = options["maxImageSelection"] as? Int ?? 99
     }
-    
+
     if options["doneButtonTitle"] != nil {
       config.wordings.done = options["doneButtonTitle"] as! String
     }
-    
+
     if options["cancelButtonTitle"] != nil {
       config.wordings.cancel = options["cancelButtonTitle"] as! String
     }
-    
+
     if options["nextButtonTitle"] != nil {
       config.wordings.next = options["nextButtonTitle"] as! String
     }
-    
+
     if options["cameraTitle"] != nil {
       config.wordings.cameraTitle = options["cameraTitle"] as! String
     }
-    
+
     if options["libraryTitle"] != nil {
       config.wordings.libraryTitle = options["libraryTitle"] as! String
     }
@@ -88,8 +75,10 @@ class TiImagepickerModule: TiModule {
     if options["albumsTitle"] != nil {
       config.wordings.albumsTitle = options["albumsTitle"] as! String
     }
-    
-    config.library.maxNumberOfItems = maxImageSelection
+
+    if options["capturePhotoImage"] != nil {
+      config.icons.capturePhotoImage = TiUtils.image(options["capturePhotoImage"], proxy: self)
+    }
 
     let picker = YPImagePicker(configuration: config)
 

@@ -50,7 +50,7 @@ Please change the module-id in both your tiapp.xml and source code usage.
 | String **cameraTitle**    | Title of the "Photo" button    | Done | iOS |
 | String **libraryTitle**    | Title of the "Library" button    | Done | iOS |
 | String **albumsTitle**    | Title of the "Albums" button    | Done | iOS |
-| int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) | Android |
+| int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5 on Android, no limit on iOS) | Android, iOS |
 | int **imageHeight**    | ImageView height in dp    | same as width | Android |
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true | Android |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp | Android |
