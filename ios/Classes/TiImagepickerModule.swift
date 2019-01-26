@@ -44,13 +44,13 @@ class TiImagepickerModule: TiModule {
   
   @objc(openGallery:)
   func openGallery(arguments: Array<Any>?) {
-    print("[WARN] NOCH DA")
     guard let arguments = arguments, let options = arguments[0] as? [String: Any] else { return }
 
     guard let callback: KrollCallback = options["callback"] as? KrollCallback else { return }
     var maxImageSelection = 99;
     var doneButtonTitle = NSLocalizedString("Done", comment: "Done")
     var cancelButtonTitle = NSLocalizedString("Cancel", comment: "Cancel")
+    var nextButtonTitle = NSLocalizedString("Next", comment: "Next")
 
     if options["maxImageSelection"] != nil {
       maxImageSelection = options["maxImageSelection"] as! Int
@@ -63,12 +63,17 @@ class TiImagepickerModule: TiModule {
     if options["cancelButtonTitle"] != nil {
       cancelButtonTitle = options["cancelButtonTitle"] as! String
     }
+    
+    if options["nextButtonTitle"] != nil {
+      nextButtonTitle = options["nextButtonTitle"] as! String
+    }
 
     var config = YPImagePickerConfiguration()
     config.library.maxNumberOfItems = maxImageSelection
     config.wordings.done = doneButtonTitle
     config.wordings.cancel = cancelButtonTitle
-    
+    config.wordings.next = nextButtonTitle
+
     let picker = YPImagePicker(configuration: config)
 
     picker.didFinishPicking { [unowned picker] items, cancelled in
@@ -79,28 +84,25 @@ class TiImagepickerModule: TiModule {
   
       var images: [TiBlob] = []
 
-      // If only one image is selected, only return it
-      if let photo = items.singlePhoto {
-        images.append(self.blob(from: photo.image))
-      } else {
-        for item in items {
-          switch item {
-          case .photo(let photo):
-            images.append(self.blob(from: photo.image))
-          case .video(_):
-            print("[WARN] Videos are not handled so far")
-          }
+      for item in items {
+        switch item {
+        case .photo(let photo):
+          images.append(self.blob(from: photo.image))
+        case .video(_):
+          print("[WARN] Videos are not handled so far")
         }
       }
+  
       callback.call([["images": images, "success": true]], thisObject: self)
       picker.dismiss(animated: true, completion: nil)
     }
  
-    print("[WARN] NOCH DA1")
+    guard let controller = TiApp.controller(), let topPresentedController = controller.topPresentedController() else {
+      print("[WARN] No window opened. Ignoring gallery call …");
+      return
+    }
 
-    TiThreadPerformOnMainThread({
-      TiApp().showModalController(picker, animated: true)
-    }, false)
+    topPresentedController.present(picker, animated: true, completion: nil)
   }
   
   private func blob(from image: UIImage) -> TiBlob {
