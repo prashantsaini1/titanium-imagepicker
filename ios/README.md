@@ -29,10 +29,8 @@ For view proxies or widgets, you must create both a view proxy and a view implem
 If you widget was named proxy, you would create the following files:
 
 ```
-TiMyfirstFooProxy.h
-TiMyfirstFooProxy.m
-TiMyfirstFoo.h
-TiMyfirstFoo.m
+TiMyfirstFooProxy.swift
+TiMyfirstFoo.swift
 ```
 
 The view implementation is named the same except it does contain the suffix `Proxy`.
@@ -119,7 +117,7 @@ exports.echo = (content) => {
 Any functions and properties that are exported will be made available as part of your
 module. All other code inside your JavaScript will be private to your module.
 
-For pure JavaScript module, you don't need to modify any of the Objective-C module code. You
+For pure JavaScript module, you don't need to modify any of the Swift module code. You
 can leave it as-is and build.
 
 ## Testing
