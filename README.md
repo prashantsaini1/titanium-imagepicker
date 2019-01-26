@@ -19,7 +19,7 @@ In 3.0.0, this module achieved parity with iOS. During that move, the module ID 
 Please change the module-id in both your tiapp.xml and source code usage.
 
 ## Requirements & Installation
-* Ti SDK >= 7.0.0.GA
+* Ti SDK (Android: 7.0.0+, iOS: 8.0.0+)
 * [Download latest module version from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/android/dist/)
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
@@ -27,7 +27,6 @@ Please change the module-id in both your tiapp.xml and source code usage.
 <module platform="android">ti.imagepicker</module>
 <module platform="iphone">ti.imagepicker</module>
 ```
-
 
 # Methods
 
@@ -45,12 +44,17 @@ Please change the module-id in both your tiapp.xml and source code usage.
 | String **coverViewColor**     |  Background color of cover-view behind checkmar icon   | semi-transparent black | Android |
 | String **checkMarkColor**     | Checkmark-icon color    | orange-tint | Android |
 | String **title**              |  Title of the gallery window   | Select Pictures | Android |
-| String **doneButtonTitle**    | Title of the OK button which calls the callback method    | DONE | Android, iOS |
+| String **doneButtonTitle**    | Title of the OK button which calls the callback method    | Done | Android, iOS |
+| String **nextButtonTitle**    | Title of the "Next" button    | Done | iOS |
+| String **cancelButtonTitle**    | Title of the "Cancel" button    | Done | iOS |
+| String **cameraTitle**    | Title of the "Photo" button    | Done | iOS |
+| String **libraryTitle**    | Title of the "Library" button    | Done | iOS |
+| String **albumsTitle**    | Title of the "Albums" button    | Done | iOS |
 | int **columnCount**      |  Number of grid-view columns to show in gallery   | 3 (2 to 5) | Android |
 | int **imageHeight**    | ImageView height in dp    | same as width | Android |
 | boolean **dividerEnabled**      |  Enable / disable dividers between grid-columns   | true | Android |
 | int **dividerWidth**     | If `dividerEnabled` is true, use it to specify the width of dividers.    | 4 dp | Android |
-| int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit | Android |
+| int **maxImageSelection**     | Maximum number of images to select. Can be used for single image selection by passing as 1     | No limit | Android, iOS |
 | String **maxImageMessage**     | Message to show when max limit is reached.     | - | Android |
 | int **shape**     | Constant as Module.SHAPE_CIRCLE or  Module.SHAPE_SQUARE     | Module.SHAPE_SQUARE | Android |
 | int **circleRadius**     | Radius of the circle if shape is Module.SHAPE_CIRCLE     | Complete circle | Android |

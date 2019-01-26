@@ -47,32 +47,49 @@ class TiImagepickerModule: TiModule {
     guard let arguments = arguments, let options = arguments[0] as? [String: Any] else { return }
 
     guard let callback: KrollCallback = options["callback"] as? KrollCallback else { return }
-    var maxImageSelection = 99;
-    var doneButtonTitle = NSLocalizedString("Done", comment: "Done")
-    var cancelButtonTitle = NSLocalizedString("Cancel", comment: "Cancel")
-    var nextButtonTitle = NSLocalizedString("Next", comment: "Next")
+    var maxImageSelection = 99
 
+    var config = YPImagePickerConfiguration()
+
+    // Some hardcoded values that may become configurable in the future
+    config.showsFilters = false
+    config.startOnScreen = .library
+    config.screens = [.library, .photo]
+    config.shouldSaveNewPicturesToAlbum = false
+    
+    if options["tintColor"] != nil {
+      config.colors.tintColor = TiUtils.colorValue(options["tintColor"])!.color
+    }
+    
     if options["maxImageSelection"] != nil {
       maxImageSelection = options["maxImageSelection"] as! Int
     }
     
     if options["doneButtonTitle"] != nil {
-      doneButtonTitle = options["doneButtonTitle"] as! String
+      config.wordings.done = options["doneButtonTitle"] as! String
     }
     
     if options["cancelButtonTitle"] != nil {
-      cancelButtonTitle = options["cancelButtonTitle"] as! String
+      config.wordings.cancel = options["cancelButtonTitle"] as! String
     }
     
     if options["nextButtonTitle"] != nil {
-      nextButtonTitle = options["nextButtonTitle"] as! String
+      config.wordings.next = options["nextButtonTitle"] as! String
+    }
+    
+    if options["cameraTitle"] != nil {
+      config.wordings.cameraTitle = options["cameraTitle"] as! String
+    }
+    
+    if options["libraryTitle"] != nil {
+      config.wordings.libraryTitle = options["libraryTitle"] as! String
     }
 
-    var config = YPImagePickerConfiguration()
+    if options["albumsTitle"] != nil {
+      config.wordings.albumsTitle = options["albumsTitle"] as! String
+    }
+    
     config.library.maxNumberOfItems = maxImageSelection
-    config.wordings.done = doneButtonTitle
-    config.wordings.cancel = cancelButtonTitle
-    config.wordings.next = nextButtonTitle
 
     let picker = YPImagePicker(configuration: config)
 
@@ -98,7 +115,7 @@ class TiImagepickerModule: TiModule {
     }
  
     guard let controller = TiApp.controller(), let topPresentedController = controller.topPresentedController() else {
-      print("[WARN] No window opened. Ignoring gallery call …");
+      print("[WARN] No window opened. Ignoring gallery call …")
       return
     }
 
