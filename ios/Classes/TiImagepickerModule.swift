@@ -96,6 +96,7 @@ class TiImagepickerModule: TiModule {
     picker.didFinishPicking { [unowned picker] items, cancelled in
       if cancelled {
         callback.call([["success": false, "cancel": true, "images": []]], thisObject: self)
+        picker.dismiss(animated: true, completion: nil)
         return
       }
   
