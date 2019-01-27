@@ -1,4 +1,0 @@
-framework module ImagePicker {
-  header "ImagePicker-Swift.h"
-  requires objc
-}

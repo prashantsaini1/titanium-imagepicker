@@ -2,17 +2,17 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.1
+version: 2.0.0
 apiversion: 2
 architectures: armv7 arm64 i386 x86_64
-description: titanium-ios-imagepicker
+description: titanium-imagepicker is a Swift based Titanium module.
 author: Hans Knöchel
-license: Apache 2
-copyright: Copyright (c) 2018 by Hans Knöchel
+license: MIT
+copyright: Copyright (c) 2019 by Hans Knöchel
 
 # these should not be edited
-name: titanium-ios-imagepicker
+name: titanium-imagepicker
 moduleid: ti.imagepicker
-guid: 680ebae9-5f3a-4a1d-9afc-31183b24157a
+guid: 8477e94d-ea5f-4fe6-8f6a-1e6bacbda2d7
 platform: iphone
-minsdk: 7.0.0
+minsdk: 8.0.0

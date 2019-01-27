@@ -9,3 +9,4 @@ android/build/
 ios/Carthage
 ios/ti.imagepicker-iphone-*.zip
 ios/titanium-ios-imagepicker.xcodeproj/project.xcworkspace/xcuserdata
+/ios/dist

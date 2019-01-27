@@ -1,39 +1,38 @@
-// This is a test harness for your module
-// You should do something interesting in this harness
-// to test out the module and to provide instructions
-// to users on how to use it by example.
+var TiImagePicker = require('ti.imagepicker');
 
-
-// open a single window
 var win = Ti.UI.createWindow({
-	backgroundColor:'white'
+    backgroundColor: '#fff'
 });
-var label = Ti.UI.createLabel();
-win.add(label);
+var btn = Ti.UI.createButton({
+    title: 'Select photos!'
+});
+
+btn.addEventListener('click', function() {
+    TiImagePicker.openGallery({
+        maxImageSelection: 5,
+        tintColor: 'red',
+        doneButtonTitle: 'Fertig',
+        nextButtonTitle: 'Weiter',
+        cancelButtonTitle: 'Abbrechen',
+        cameraTitle: 'Kamera',
+        libraryTitle: 'Galerie',
+        albumsTitle: 'Alben',
+        callback: function(event) {
+            if (!event.success) {
+                Ti.API.error('Cannot get images!');
+                return;
+            }
+
+            console.log('Successfully selected ' + event.images.length + ' images!');
+
+            event.images.forEach(function(image, index) {
+                var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationCacheDirectory, 'test-' + index + '.jpg');
+                file.write(image);
+                console.log(file.nativePath);
+            });
+        }
+    })
+});
+
+win.add(btn);
 win.open();
-
-// TODO: write your module tests here
-var titanium_ios_imagepicker = require('ti.imagepicker');
-Ti.API.info("module is => " + titanium_ios_imagepicker);
-
-label.text = titanium_ios_imagepicker.example();
-
-Ti.API.info("module exampleProp is => " + titanium_ios_imagepicker.exampleProp);
-titanium_ios_imagepicker.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = titanium_ios_imagepicker.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
-	});
-
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
-}
-
