@@ -20,7 +20,7 @@ Please change the module-id in both your tiapp.xml and source code usage.
 
 ## Requirements & Installation
 * Ti SDK (Android: 7.0.0+, iOS: 8.0.0+)
-* [Download latest module version from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/android/dist/)
+* [Download latest module version from here](https://github.com/prashantsaini1/titanium-android-imagepicker/raw/master/dist/)
 * Unzip it, put it in your Titanium project modules folder & add this line to your tiapp.xml <modules> node.
 
 ```
