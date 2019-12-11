@@ -209,3 +209,7 @@ module.createCustomGallery({
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+## Contributions
+
+If you enjoy this module, feel free to contribute with your PR or [donate](https://paypal.me/prashantsainii) :-)
