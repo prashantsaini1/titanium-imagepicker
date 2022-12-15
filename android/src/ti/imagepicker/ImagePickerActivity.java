@@ -13,10 +13,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -189,7 +189,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 	    		image_cover = TiRHelper.getResource("id.coverView");
 	    		image_checkbox = TiRHelper.getResource("id.checkbox");
 	    		error_image = TiRHelper.getResource("drawable.no_image");
-	
+
 	    	} catch (ResourceNotFoundException e) {
 	    		Log.i(TAG, "XML resources could not be found!!!");
 	    	}
@@ -198,7 +198,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
     private void setupMaxCountSize() {
 	    	int maxCount = Defaults.MAX_IMAGE_SELECTION;
-	
+
 	    	// set max-image-select count to total no. of pics if passed count is <= 0 or
 	    	// >= total no. of pics
 	    	if ( (maxCount <= 0) || (maxCount >= adapter.size()) ) {
@@ -225,21 +225,21 @@ public class ImagePickerActivity extends AppCompatActivity {
 	private void setupGlideOptions() {
 	    	options = new RequestOptions();
 	    	int size;
-	
+
 	    	if (isShapeCircle) {
 	    		if (Defaults.CIRCLE_RADIUS > 0) {
 	    			size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
 	    			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
-	
+
 	    		} else {
 	    			size = Defaults.IMAGE_HEIGHT;
 	    			options.circleCrop();
 	    		}
-	
+
 	    	} else {
 	    		size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
 	    	}
-	
+
 	    	options.override(size, size);
 	    	options.error(error_image);
 	    	options.priority(Priority.HIGH);
@@ -256,15 +256,15 @@ public class ImagePickerActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<ImageAdapaterArray> items) {
 	        	if (items.size() > 0) {
 	        		totalSelectedImages = 0;
-	
+
 	        		adapter.clear();
 	            	adapter.addAll(items);
-	
+
 	            	setupMaxCountSize();
 	            	setTotalCount();
-	
+
 	                adapterSet.notifyDataSetChanged();
-	
+
 	        	} else {
 	        		Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "No pictures available in your gallery.", Toast.LENGTH_SHORT).show();
 	        		onBackPressed();
