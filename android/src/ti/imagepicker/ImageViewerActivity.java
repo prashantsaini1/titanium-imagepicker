@@ -82,17 +82,17 @@ public class ImageViewerActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             if (!Defaults.STATUS_BAR_COLOR.isEmpty()) {
-            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
+            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
-            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR));
+            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
         }
 
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
         		if (!Defaults.BAR_COLOR.isEmpty()) {
-        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
             actionBar.setDisplayShowHomeEnabled(true);
@@ -110,7 +110,7 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         FrameLayout frame_container = (FrameLayout) findViewById(frame_layout_id);
         frame_container.addView(mRecyclerView);
-        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
+        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
 
         adapterSet = new PhotoAdapter(imagesAdapter);
         mRecyclerView.setAdapter(adapterSet);
@@ -234,8 +234,8 @@ public class ImageViewerActivity extends AppCompatActivity {
         		this.layout.removeView(this.title);
 
         	} else {
-        		this.title.setTextColor(TiConvert.toColor(titleColor));
-        		this.title.setBackgroundColor(TiConvert.toColor(titleBg));
+        		this.title.setTextColor(TiConvert.toColor(titleColor, TiApplication.getAppCurrentActivity()));
+        		this.title.setBackgroundColor(TiConvert.toColor(titleBg, TiApplication.getAppCurrentActivity()));
         		this.title.setText(title);
         	}
         }
