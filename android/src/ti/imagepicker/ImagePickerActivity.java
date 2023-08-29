@@ -13,10 +13,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -96,17 +96,17 @@ public class ImagePickerActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             if (!Defaults.STATUS_BAR_COLOR.isEmpty()) {
-            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
+            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
-            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR));
+            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
         }
 
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
         		if (!Defaults.BAR_COLOR.isEmpty()) {
-        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
             actionBar.setDisplayShowHomeEnabled(true);
@@ -126,7 +126,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         FrameLayout frame_container = (FrameLayout) findViewById(container);
         frame_container.addView(mRecyclerView);
-        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
+        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
 
         adapterSet = new PhotoAdapter(adapter);
         mRecyclerView.setAdapter(adapterSet);
@@ -189,7 +189,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 	    		image_cover = TiRHelper.getResource("id.coverView");
 	    		image_checkbox = TiRHelper.getResource("id.checkbox");
 	    		error_image = TiRHelper.getResource("drawable.no_image");
-	
+
 	    	} catch (ResourceNotFoundException e) {
 	    		Log.i(TAG, "XML resources could not be found!!!");
 	    	}
@@ -198,7 +198,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
     private void setupMaxCountSize() {
 	    	int maxCount = Defaults.MAX_IMAGE_SELECTION;
-	
+
 	    	// set max-image-select count to total no. of pics if passed count is <= 0 or
 	    	// >= total no. of pics
 	    	if ( (maxCount <= 0) || (maxCount >= adapter.size()) ) {
@@ -225,21 +225,21 @@ public class ImagePickerActivity extends AppCompatActivity {
 	private void setupGlideOptions() {
 	    	options = new RequestOptions();
 	    	int size;
-	
+
 	    	if (isShapeCircle) {
 	    		if (Defaults.CIRCLE_RADIUS > 0) {
 	    			size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
 	    			options.transforms(new CenterCrop(), new RoundedCorners(Defaults.CIRCLE_RADIUS));
-	
+
 	    		} else {
 	    			size = Defaults.IMAGE_HEIGHT;
 	    			options.circleCrop();
 	    		}
-	
+
 	    	} else {
 	    		size = (int) (0.65 * Defaults.IMAGE_HEIGHT);
 	    	}
-	
+
 	    	options.override(size, size);
 	    	options.error(error_image);
 	    	options.priority(Priority.HIGH);
@@ -256,15 +256,15 @@ public class ImagePickerActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<ImageAdapaterArray> items) {
 	        	if (items.size() > 0) {
 	        		totalSelectedImages = 0;
-	
+
 	        		adapter.clear();
 	            	adapter.addAll(items);
-	
+
 	            	setupMaxCountSize();
 	            	setTotalCount();
-	
+
 	                adapterSet.notifyDataSetChanged();
-	
+
 	        	} else {
 	        		Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "No pictures available in your gallery.", Toast.LENGTH_SHORT).show();
 	        		onBackPressed();
@@ -290,7 +290,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             layout.getLayoutParams().height = Defaults.IMAGE_HEIGHT;
 
             checkMark = (ImageView) v.findViewById(image_checkbox);
-            drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR), false);
+            drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR, TiApplication.getAppCurrentActivity()), false);
 
             if (isShapeCircle) {
             	int pad = Defaults.CIRCLE_PADDING;
@@ -300,10 +300,10 @@ public class ImagePickerActivity extends AppCompatActivity {
             	cover_view.getLayoutParams().height = Defaults.IMAGE_HEIGHT - 2 * pad;
             	cover_view.getLayoutParams().width = Defaults.IMAGE_HEIGHT - 2 * pad;
 
-            	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR), true);
+            	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR, TiApplication.getAppCurrentActivity()), true);
 
             } else {
-            	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
+            	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
             v.setOnClickListener(new View.OnClickListener(){

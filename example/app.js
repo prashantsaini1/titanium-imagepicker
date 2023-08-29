@@ -5,35 +5,38 @@
 
 
 // open a single window
-var win = Ti.UI.createWindow({
-	backgroundColor:'white'
-});
-var label = Ti.UI.createLabel();
-win.add(label);
+var win = Ti.UI.createWindow();
 win.open();
 
-// TODO: write your module tests here
-var imagepicker = require('in.prashant.imagepicker');
-Ti.API.info("module is => " + imagepicker);
+win.addEventListener("open", function() {
+	console.log("open")
+	var module = require('ti.imagepicker');
+	var permissions = [
+		"android.permission.READ_MEDIA_IMAGES"
+	];
 
-label.text = imagepicker.example();
-
-Ti.API.info("module exampleProp is => " + imagepicker.exampleProp);
-imagepicker.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = imagepicker.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
+	Ti.Android.requestPermissions(permissions, function(e) {
+		if (e.success) {
+			module.openGallery({
+				title: "Custom Title",
+				colorPrimaryDark: '#de3b30',
+				colorPrimary: '#de3b30',
+				theme: 'CustomeTheme', // Pass any ActionBar enabled theme to avoid crash if any non ActionBar theme is applied on overall app, else auto uses the application theme
+				columnCount: 4,
+				coverViewColor: '#aaffffff',
+				checkMarkColor: '#000000',
+				doneButtonTitle: "Proceed",
+				callback: function(e) {
+					if (e.success) {
+						var allImages = e.images;
+					} else if (e.cancel) {
+						// gallery result cancelled
+					} else {
+						alert(e.message);
+					}
+				}
+			});
+		}
 	});
 
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
-}
-
+})
