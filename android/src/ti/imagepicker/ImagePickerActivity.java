@@ -96,17 +96,17 @@ public class ImagePickerActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             if (!Defaults.STATUS_BAR_COLOR.isEmpty()) {
-            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR));
+            	window.setStatusBarColor(TiConvert.toColor(Defaults.STATUS_BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
-            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR));
+            window.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
         }
 
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
         		if (!Defaults.BAR_COLOR.isEmpty()) {
-        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR));
+        			actionBar.setBackgroundDrawable(TiConvert.toColorDrawable(Defaults.BAR_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
             actionBar.setDisplayShowHomeEnabled(true);
@@ -126,7 +126,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         FrameLayout frame_container = (FrameLayout) findViewById(container);
         frame_container.addView(mRecyclerView);
-        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR));
+        frame_container.setBackgroundColor(TiConvert.toColor(Defaults.BACKGROUND_COLOR, TiApplication.getAppCurrentActivity()));
 
         adapterSet = new PhotoAdapter(adapter);
         mRecyclerView.setAdapter(adapterSet);
@@ -290,7 +290,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             layout.getLayoutParams().height = Defaults.IMAGE_HEIGHT;
 
             checkMark = (ImageView) v.findViewById(image_checkbox);
-            drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR), false);
+            drawBackground(checkMark, TiConvert.toColor(Defaults.CHECKMARK_COLOR, TiApplication.getAppCurrentActivity()), false);
 
             if (isShapeCircle) {
             	int pad = Defaults.CIRCLE_PADDING;
@@ -300,10 +300,10 @@ public class ImagePickerActivity extends AppCompatActivity {
             	cover_view.getLayoutParams().height = Defaults.IMAGE_HEIGHT - 2 * pad;
             	cover_view.getLayoutParams().width = Defaults.IMAGE_HEIGHT - 2 * pad;
 
-            	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR), true);
+            	drawBackground(cover_view, TiConvert.toColor(Defaults.COVER_VIEW_COLOR, TiApplication.getAppCurrentActivity()), true);
 
             } else {
-            	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR));
+            	cover_view.setBackgroundColor(TiConvert.toColor(Defaults.COVER_VIEW_COLOR, TiApplication.getAppCurrentActivity()));
             }
 
             v.setOnClickListener(new View.OnClickListener(){

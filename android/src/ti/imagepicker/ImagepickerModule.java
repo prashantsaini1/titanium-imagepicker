@@ -20,6 +20,7 @@ import org.appcelerator.titanium.TiBlob;
 import org.appcelerator.titanium.util.TiActivitySupport;
 import org.appcelerator.kroll.common.Log;
 
+import android.Manifest;
 import android.os.Build;
 import android.app.Activity;
 import android.content.Intent;
@@ -95,22 +96,19 @@ public class ImagepickerModule extends KrollModule
 		if (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 			return true;
 		}
-
+		if (Build.VERSION.SDK_INT >= 33) {
+			if (context.checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+				return true;
+			}
+		}
 		return false;
     }
 
 
 	@Kroll.method
 	public void openGallery(@Kroll.argument(optional=true) KrollDict options) {
-		if (!hasStoragePermissions()) {
-			Log.e(Defaults.LCAT, "Storage permissions are denied.");
-			Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "Storage permissions are denied.", Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		boolean isOption = null != options;
-
 		KrollFunction callback = null;
+		boolean isOption = null != options;
 
 		if (isOption) {
 			if (options.containsKeyAndNotNull(Defaults.Params.CALLBACK)) {
@@ -119,6 +117,15 @@ public class ImagepickerModule extends KrollModule
 				}
 			}
 		}
+
+		if (!hasStoragePermissions()) {
+			Log.e(Defaults.LCAT, "Storage permissions are denied.");
+			Toast.makeText(TiApplication.getAppCurrentActivity().getApplicationContext(), "Storage permissions are denied.", Toast.LENGTH_SHORT).show();
+			callback.callAsync(krollObject, new KrollDict());
+			return;
+		}
+
+
 
 		GalleryResultHandler handler = new GalleryResultHandler(callback, getKrollObject());
 
